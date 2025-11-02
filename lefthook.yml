@@ -1,0 +1,10 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: format
+      glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
+      run: pnpm biome format --write --no-errors-on-unmatched {staged_files}
+      stage_fixed: true
+
+    - name: type check
+      run: pnpm tsgo --noEmit

@@ -81,7 +81,7 @@
     "@rslib/core": "0.17.0",
     "@rstest/core": "0.6.1",
     "@rstest/coverage-istanbul": "0.0.4",
-    "@typescript/native-preview": "7.0.0-dev.20251101.1",
+    "@typescript/native-preview": "7.0.0-dev.20251102.1",
     "lefthook": "2.0.2",
     "rspress": "1.45.8",
     "sort-package-json": "3.4.0",

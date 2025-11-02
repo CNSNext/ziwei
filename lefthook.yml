@@ -6,5 +6,9 @@ pre-commit:
       run: pnpm biome format --write --no-errors-on-unmatched {staged_files}
       stage_fixed: true
 
+    - name: lint
+      glob: "*"
+      run: pnpm biome check --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+
     - name: type check
       run: pnpm tsgo --noEmit

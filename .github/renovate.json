@@ -1,20 +1,12 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ],
-  "labels": [
-    "dependencies"
-  ],
-  "assignees": [
-    "lzm0x219"
-  ],
+  "extends": ["config:recommended"],
+  "labels": ["dependencies"],
+  "assignees": ["lzm0x219"],
   "packageRules": [
     {
       "groupName": "rsbuild",
-      "matchPackageNames": [
-        "@rsbuild/{/,}**"
-      ]
+      "matchPackageNames": ["@rsbuild/{/,}**"]
     }
   ],
   "autoApprove": true,

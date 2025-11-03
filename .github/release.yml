@@ -9,16 +9,18 @@ changelog:
   categories:
     - title: Features
       labels:
-        - Semver-Minor
+        - feature
+    - title: Enhancement
+      labels:
         - enhancement
 
     - title: Breaking Changes
       labels:
-        - Semver-Major
         - breaking-change
 
     - title: Bug Fixes
       labels:
+        - bug
         - bugfix
 
     - title: Performance Improvements
@@ -32,6 +34,7 @@ changelog:
 
     - title: Tests
       labels:
+        - test
         - tests
 
     - title: Build System
@@ -60,10 +63,6 @@ changelog:
         - i18n
         - localization
 
-    - title: Tooling
-      labels:
-        - tooling
-
     - title: Examples
       labels:
         - examples
@@ -83,6 +82,10 @@ changelog:
     - title: Removed
       labels:
         - removed
+
+    - title: Design
+      labels:
+        - design
 
     - title: Other Changes
       labels:

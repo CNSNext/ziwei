@@ -83,7 +83,7 @@
     "@rstest/coverage-istanbul": "0.0.4",
     "@typescript/native-preview": "7.0.0-dev.20251103.1",
     "lefthook": "2.0.2",
-    "rspress": "1.45.8",
+    "rspress": "1.46.0",
     "sort-package-json": "3.4.0",
     "typescript": "5.9.3"
   },

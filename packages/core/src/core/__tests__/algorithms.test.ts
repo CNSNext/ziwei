@@ -1,4 +1,4 @@
-import { describe, expect, test } from "@rstest/core";
+import { describe, expect, test } from "vitest";
 import { _yearToMonthMap } from "../../constants";
 import type { BranchKey, StemKey } from "../../typings";
 import {

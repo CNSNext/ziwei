@@ -1,4 +1,4 @@
-import { describe, expect, test } from "@rstest/core";
+import { describe, expect, test } from "vitest";
 import i18n from "../../i18n";
 import type { BranchName, PalaceProps, StemName } from "../../typings";
 import { createPalace } from "../palace";

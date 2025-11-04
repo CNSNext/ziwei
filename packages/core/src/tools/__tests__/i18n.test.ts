@@ -1,4 +1,4 @@
-import { describe, expect, rstest, test } from "@rstest/core";
+import { describe, expect, test, vi } from "vitest";
 import { createI18n } from "../i18n";
 
 // 模拟语言包
@@ -76,7 +76,7 @@ describe("createI18n()", () => {
 
   // 测试场景 9：应该在语言变化时触发回调函数
   test("应该在语言变化时触发回调函数", () => {
-    const mockCallback = rstest.fn((newLang: string) => {
+    const mockCallback = vi.fn((newLang: string) => {
       console.log("Language changed to:", newLang);
     });
     i18n.onLanguageChange(mockCallback);
@@ -89,8 +89,8 @@ describe("createI18n()", () => {
 
   // 测试场景 10：应该在语言变化时支持多个回调函数的触发
   test("应该在语言变化时支持多个回调函数的触发", () => {
-    const fn1 = rstest.fn();
-    const fn2 = rstest.fn();
+    const fn1 = vi.fn();
+    const fn2 = vi.fn();
     i18n.onLanguageChange(fn1);
     i18n.onLanguageChange(fn2);
 

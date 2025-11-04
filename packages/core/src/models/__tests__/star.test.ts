@@ -1,4 +1,4 @@
-import { describe, expect, test } from "@rstest/core";
+import { describe, expect, test } from "vitest";
 import i18n from "../../i18n";
 import type { StarProps, TransformationName } from "../../typings";
 import { createStar } from "../star";

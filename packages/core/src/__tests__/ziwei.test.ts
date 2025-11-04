@@ -1,4 +1,4 @@
-import { describe, test } from "@rstest/core";
+import { describe, test } from "vitest";
 
 describe("ziwei", () => {
   test("bySolar", () => {

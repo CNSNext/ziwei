@@ -1,5 +1,5 @@
-import { describe, expect, test } from "@rstest/core";
 import { LunarHour, SolarTime } from "tyme4ts";
+import { describe, expect, test } from "vitest";
 import { type GlobalConfigs, getGlobalConfigs } from "../../configs";
 import {
   calculateAstrolabeDate,

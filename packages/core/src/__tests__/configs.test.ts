@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, test } from "@rstest/core";
+import { beforeEach, describe, expect, test } from "vitest";
 import { GlobalConfigs, getGlobalConfigs, setGlobalConfigs } from "../configs";
 
 describe("configs", () => {

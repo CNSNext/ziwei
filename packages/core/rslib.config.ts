@@ -29,7 +29,7 @@ export default defineConfig({
       umdName: "ZiWei",
       output: {
         filename: {
-          js: "ziweijs.min.js",
+          js: "ziweijs.core.min.js",
         },
         externals: {
           tyme4ts: "tyme4ts",

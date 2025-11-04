@@ -1,4 +1,4 @@
-import { describe, expect, test } from "@rstest/core";
+import { describe, expect, test } from "vitest";
 import { $index, $oppositeIndex, $relativeIndex } from "../math";
 
 describe("$index()", () => {

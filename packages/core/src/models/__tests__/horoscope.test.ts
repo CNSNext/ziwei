@@ -1,4 +1,4 @@
-import { describe, expect, test } from "@rstest/core";
+import { describe, expect, test } from "vitest";
 import type { HoroscopePalace, HoroscopeProps } from "../../typings";
 import { createHoroscope } from "../horoscope";
 

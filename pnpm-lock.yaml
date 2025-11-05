@@ -9,6 +9,9 @@ catalogs:
     '@biomejs/biome':
       specifier: 2.3.3
       version: 2.3.3
+    '@changesets/cli':
+      specifier: 2.29.7
+      version: 2.29.7
     '@microsoft/api-extractor':
       specifier: 7.54.0
       version: 7.54.0
@@ -39,6 +42,9 @@ catalogs:
     ahooks:
       specifier: 3.9.6
       version: 3.9.6
+    is-ci:
+      specifier: 4.1.0
+      version: 4.1.0
     lefthook:
       specifier: 2.0.2
       version: 2.0.2
@@ -69,7 +75,7 @@ importers:
         specifier: 'catalog:'
         version: 2.3.3
       '@changesets/cli':
-        specifier: 2.29.7
+        specifier: 'catalog:'
         version: 2.29.7(@types/node@24.6.1)
       '@microsoft/api-extractor':
         specifier: 'catalog:'
@@ -90,7 +96,7 @@ importers:
         specifier: 'catalog:'
         version: 4.0.7(@vitest/browser@4.0.7(vite@7.1.12(@types/node@24.6.1)(jiti@2.6.1))(vitest@4.0.7))(vitest@4.0.7)
       is-ci:
-        specifier: 4.1.0
+        specifier: 'catalog:'
         version: 4.1.0
       lefthook:
         specifier: 'catalog:'

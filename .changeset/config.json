@@ -3,7 +3,7 @@
   "changelog": "@changesets/cli/changelog",
   "commit": false,
   "fixed": [],
-  "linked": [["@ziweijs/*"]],
+  "linked": [["@ziweijs/*", "ziwei.js"]],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",

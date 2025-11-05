@@ -173,6 +173,25 @@ importers:
         specifier: 'catalog:'
         version: 5.9.3
 
+  packages/ziwei:
+    dependencies:
+      '@ziweijs/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      '@microsoft/api-extractor':
+        specifier: 'catalog:'
+        version: 7.54.0(@types/node@24.6.1)
+      '@rslib/core':
+        specifier: 'catalog:'
+        version: 0.17.1(@microsoft/api-extractor@7.54.0(@types/node@24.6.1))(@typescript/native-preview@7.0.0-dev.20251105.1)(typescript@5.9.3)
+      '@typescript/native-preview':
+        specifier: 'catalog:'
+        version: 7.0.0-dev.20251105.1
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+
 packages:
 
   '@ast-grep/napi-darwin-arm64@0.37.0':

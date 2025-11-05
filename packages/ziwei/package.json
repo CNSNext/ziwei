@@ -1,6 +1,6 @@
 {
-  "name": "@ziweijs/react",
-  "version": "0.0.0-devlopment",
+  "name": "ziwei.js",
+  "version": "0.1.0",
   "publishConfig": {
     "access": "public"
   },
@@ -39,14 +39,14 @@
     "ziwei-doushu-library",
     "ziwei-doushu-calculator"
   ],
-  "homepage": "https://github.com/lzm0x219/ziwei/tree/main/packages/react#readme",
+  "homepage": "https://github.com/lzm0x219/ziwei/tree/main/packages/ziwei#readme",
   "bugs": {
     "url": "https://github.com/lzm0x219/ziwei/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lzm0x219/ziwei.git",
-    "directory": "packages/react"
+    "directory": "packages/ziwei"
   },
   "license": "MIT",
   "author": {
@@ -59,10 +59,10 @@
     "require": "./dist/index.cjs"
   },
   "main": "./dist/index.js",
-  "jsdelivr": "dist/ziweijs.react.min.js",
-  "unpkg": "dist/ziweijs.react.min.js",
+  "jsdelivr": "dist/ziweijs.min.js",
+  "unpkg": "dist/ziweijs.min.js",
   "module": "./dist/index.js",
-  "browser": "dist/ziweijs.react.min.js",
+  "browser": "dist/ziweijs.min.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist/"
@@ -70,24 +70,16 @@
   "scripts": {
     "lint": "pnpm biome check --no-errors-on-unmatched --files-ignore-unknown=true",
     "check-types": "tsgo --noEmit",
-    "build": "",
+    "build": "rslib build",
     "build:watch": "rslib build --watch"
   },
   "dependencies": {
-    "ahooks": "catalog:",
     "@ziweijs/core": "workspace:*"
   },
-  "peerDependencies": {
-    "react": ">=19.2.0",
-    "react-dom": ">=19.2.0"
-  },
   "devDependencies": {
-    "@types/react": "catalog:",
-    "@types/react-dom": "catalog:",
     "@rslib/core": "catalog:",
     "typescript": "catalog:",
     "@typescript/native-preview": "catalog:",
-    "@microsoft/api-extractor": "catalog:",
-    "@rsbuild/plugin-react": "catalog:"
+    "@microsoft/api-extractor": "catalog:"
   }
 }

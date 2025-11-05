@@ -2,11 +2,8 @@
   "name": "ziwei",
   "private": true,
   "scripts": {
-    "build": "turbo run build",
-    "check-types": "turbo run check-types",
+    "build": "moon :build",
     "coverage": "vitest run --coverage",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
     "prepare": "is-ci || lefthook install",
     "test": "vitest",
     "test:analytics": "vitest --reporter=junit --outputFile=test-report.junit.xml"
@@ -15,6 +12,7 @@
     "@biomejs/biome": "catalog:",
     "@changesets/cli": "catalog:",
     "@microsoft/api-extractor": "catalog:",
+    "@moonrepo/cli": "1.41.6",
     "@rslib/core": "catalog:",
     "@typescript/native-preview": "catalog:",
     "@vitejs/plugin-react": "catalog:",
@@ -23,7 +21,6 @@
     "is-ci": "catalog:",
     "lefthook": "catalog:",
     "sort-package-json": "catalog:",
-    "turbo": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:",
     "vitest-browser-react": "catalog:"

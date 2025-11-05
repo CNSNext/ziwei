@@ -67,12 +67,6 @@
   "files": [
     "dist/"
   ],
-  "scripts": {
-    "lint": "pnpm biome check --no-errors-on-unmatched --files-ignore-unknown=true",
-    "check-types": "tsgo --noEmit",
-    "build": "",
-    "build:watch": "rslib build --watch"
-  },
   "dependencies": {
     "ahooks": "catalog:",
     "@ziweijs/core": "workspace:*"
@@ -84,6 +78,7 @@
   "devDependencies": {
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "@rsbuild/core": "catalog:",
     "@rslib/core": "catalog:",
     "typescript": "catalog:",
     "@typescript/native-preview": "catalog:",

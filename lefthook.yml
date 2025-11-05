@@ -11,8 +11,8 @@ pre-commit:
       run: pnpm sort-package-json
 
     - name: lint
-      glob: "*"
+      glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
       run: pnpm biome check --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
 
     - name: type check
-      run: pnpm check-types
+      run: pnpm tsgo --noEmit

@@ -71,7 +71,7 @@
     "lint": "pnpm biome check --no-errors-on-unmatched --files-ignore-unknown=true",
     "check-types": "tsgo --noEmit",
     "build": "rslib build",
-    "build:watch": "rslib build --watch"
+    "dev": "rslib build --watch"
   },
   "dependencies": {
     "@ziweijs/core": "workspace:*"

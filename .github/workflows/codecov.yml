@@ -28,8 +28,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run tests
-        run: pnpm test
+      - name: Run tests coverage
+        run: pnpm coverage
 
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v5

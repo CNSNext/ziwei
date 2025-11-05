@@ -17,6 +17,7 @@ catalog:
   "@vitest/coverage-v8": 4.0.7
   "@types/react": 19.2.2
   "@types/react-dom": 19.2.2
+  "@changesets/cli": 2.29.7
   lefthook: 2.0.2
   react: 19.2.0
   react-dom: 19.2.0
@@ -27,3 +28,4 @@ catalog:
   vitest: 4.0.7
   vitest-browser-react: 2.0.2
   ahooks: 3.9.6
+  is-ci: 4.1.0

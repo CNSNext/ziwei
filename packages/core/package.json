@@ -1,6 +1,9 @@
 {
   "name": "@ziweijs/core",
   "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "专业级北派紫微斗数排盘工具库",
   "keywords": [
     "紫微斗数",

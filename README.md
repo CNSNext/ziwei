@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/CNSNext/ziwei/refs/heads/main/.github/splash.png" alt="ziwei.js" />
+<img src="https://raw.githubusercontent.com/lzm0x219/ziwei/refs/heads/main/.github/splash.png" alt="ziwei.js" />
 
 [![NPM Version](https://img.shields.io/npm/v/ziwei.js)](https://www.npmjs.com/package/ziwei.js)
 [![NPM Downloads](https://img.shields.io/npm/dm/ziwei.js)](https://www.npmjs.com/package/ziwei.js)
@@ -12,4 +12,4 @@
 
 ## 版权
 
-本项目根据 [MIT](https://github.com/CNSNext/ziwei/blob/main/LICENSE) 开源许可证条款授权使用。
+本项目根据 [MIT](https://github.com/lzm0x219/ziwei/blob/main/LICENSE) 开源许可证条款授权使用。

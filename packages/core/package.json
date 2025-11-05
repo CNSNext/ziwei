@@ -67,12 +67,6 @@
   "files": [
     "dist/"
   ],
-  "scripts": {
-    "lint": "pnpm biome check --no-errors-on-unmatched --files-ignore-unknown=true",
-    "check-types": "tsgo --noEmit",
-    "build": "rslib build",
-    "build:watch": "rslib build --watch"
-  },
   "dependencies": {
     "tyme4ts": "catalog:"
   },

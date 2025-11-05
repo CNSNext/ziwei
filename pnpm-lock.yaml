@@ -86,6 +86,9 @@ importers:
       '@vitest/coverage-v8':
         specifier: 'catalog:'
         version: 4.0.7(@vitest/browser@4.0.7(vite@7.1.12(@types/node@24.6.1)(jiti@2.6.1))(vitest@4.0.7))(vitest@4.0.7)
+      is-ci:
+        specifier: 4.1.0
+        version: 4.1.0
       lefthook:
         specifier: 'catalog:'
         version: 2.0.2
@@ -1026,6 +1029,10 @@ packages:
     resolution: {integrity: sha512-aUTnJc/JipRzJrNADXVvpVqi6CO0dn3nx4EVPxijri+fj3LUUDyZQOgVeW54Ob3Y1Xh9Iz8f+CgaCl8v0mn9bA==}
     engines: {node: '>=18'}
 
+  ci-info@4.3.1:
+    resolution: {integrity: sha512-Wdy2Igu8OcBpI2pZePZ5oWjPC38tmDVx5WKUXKwlLYkA0ozo85sLsLvkBbBn/sZaSCMFOGZJ14fvW9t5/d7kdA==}
+    engines: {node: '>=8'}
+
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
 
@@ -1144,6 +1151,10 @@ packages:
   intersection-observer@0.12.2:
     resolution: {integrity: sha512-7m1vEcPCxXYI8HqnL8CKI6siDyD+eIWSwgB3DZA+ZTogxk9I4CDnj4wilt9x/+/QbHI4YG5YZNmC6458/e9Ktg==}
     deprecated: The Intersection Observer polyfill is no longer needed and can safely be removed. Intersection Observer has been Baseline since 2019.
+
+  is-ci@4.1.0:
+    resolution: {integrity: sha512-Ab9bQDQ11lWootZUI5qxgN2ZXwxNI5hTwnsvOc1wyxQ7zQ8OkEDw79mI0+9jI3x432NfwbVRru+3noJfXF6lSQ==}
+    hasBin: true
 
   is-core-module@2.16.1:
     resolution: {integrity: sha512-UfoeMA6fIJ8wTYFEUjelnaGI67v6+N7qXJEvQuIGa99l4xsCruSYOVSQ0uPANn4dAzm8lkYPaKLrrijLq7x23w==}
@@ -2485,6 +2496,8 @@ snapshots:
 
   chai@6.2.0: {}
 
+  ci-info@4.3.1: {}
+
   convert-source-map@2.0.0: {}
 
   core-js@3.46.0: {}
@@ -2587,6 +2600,10 @@ snapshots:
   import-lazy@4.0.0: {}
 
   intersection-observer@0.12.2: {}
+
+  is-ci@4.1.0:
+    dependencies:
+      ci-info: 4.3.1
 
   is-core-module@2.16.1:
     dependencies:

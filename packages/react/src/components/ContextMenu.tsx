@@ -1,6 +1,4 @@
-import { useClickAway } from "ahooks";
 import type React from "react";
-import { useRef } from "react";
 import { createPortal } from "react-dom";
 
 // 类型定义
@@ -34,16 +32,8 @@ const Menu: React.FC<{
   menuItems: Array<{ label: string; onClick: () => void }>;
   onClose: () => void;
 }> = ({ x, y, menuItems, onClose }) => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  // 点击菜单外部时关闭菜单
-  useClickAway(() => {
-    onClose();
-  }, ref);
-
   return (
     <div
-      ref={ref}
       style={{
         position: "fixed",
         top: y,

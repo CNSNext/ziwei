@@ -9,6 +9,7 @@ pre-commit:
     - name: format package.json
       glob: "package.json"
       run: pnpm sort-package-json
+      stage_fixed: true
 
     - name: lint
       glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"

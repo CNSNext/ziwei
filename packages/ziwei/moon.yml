@@ -3,6 +3,8 @@ language: "typescript"
 
 tasks:
   dev:
+    deps:
+      - "^:build"
     command: "rslib build --watch"
     inputs:
       - "src/**/*"
@@ -12,6 +14,8 @@ tasks:
       - "dist"
     local: true
   build:
+    deps:
+      - "^:build"
     command: "rslib build"
     inputs:
       - "src/**/*"

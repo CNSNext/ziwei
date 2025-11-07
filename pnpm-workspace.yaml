@@ -12,7 +12,7 @@ catalog:
   "@rsbuild/core": 1.6.2
   "@rslib/core": 0.17.1
   "@rsbuild/plugin-react": 1.4.2
-  "@typescript/native-preview": 7.0.0-dev.20251106.1
+  "@typescript/native-preview": 7.0.0-dev.20251107.1
   "@vitejs/plugin-react": 5.1.0
   "@vitest/browser-playwright": 4.0.8
   "@vitest/coverage-v8": 4.0.8

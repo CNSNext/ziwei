@@ -77,13 +77,13 @@ export default {
       name: "命宫",
       horoscope: "大命",
     },
-    FU_QI: {
-      name: "夫妻",
-      horoscope: "大夫",
-    },
     XIONG_DI: {
       name: "兄弟",
       horoscope: "大兄",
+    },
+    FU_QI: {
+      name: "夫妻",
+      horoscope: "大夫",
     },
     ZI_NV: {
       name: "子女",

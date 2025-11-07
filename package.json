@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
+    "@changesets/changelog-github": "0.5.1",
     "@changesets/cli": "catalog:",
     "@microsoft/api-extractor": "catalog:",
     "@moonrepo/cli": "1.41.6",

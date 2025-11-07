@@ -3,6 +3,9 @@
   "private": true,
   "scripts": {
     "build": "moon :build",
+    "changeset": "changeset",
+    "changeset:publish": "changeset publish",
+    "changeset:version": "changeset version",
     "coverage": "vitest run --coverage",
     "prepare": "is-ci || lefthook install",
     "test": "vitest",

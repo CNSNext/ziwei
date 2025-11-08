@@ -1,3 +1,4 @@
+import type { GenderKey, Language } from "@ziweijs/core";
 import { useCallback, useMemo } from "react";
 import DestinyBoard from "./components/DestinyBoard";
 import { ConfigContext, type ConfigContextProps } from "./context/config";
@@ -7,9 +8,20 @@ import { colorPalette } from "./theme/color";
 export interface ZiWeiProps {
   width?: number;
   height?: number;
+  name: string;
+  date: string;
+  gender: GenderKey;
+  language?: Language;
 }
 
-export default function ZiWei({ width = 600, height = 600 }: ZiWeiProps) {
+export default function ZiWei({
+  width = 600,
+  height = 600,
+  name,
+  date,
+  gender,
+  language,
+}: ZiWeiProps) {
   const $n = useCallback(
     (n: number) => {
       return (n / 600) * width;
@@ -89,7 +101,14 @@ export default function ZiWei({ width = 600, height = 600 }: ZiWeiProps) {
   return (
     <ConfigContext value={config}>
       <RuntimeContainer.Provider>
-        <DestinyBoard width={width} height={height} />
+        <DestinyBoard
+          width={width}
+          height={height}
+          name={name}
+          date={date}
+          gender={gender}
+          language={language}
+        />
       </RuntimeContainer.Provider>
     </ConfigContext>
   );

@@ -1,5 +1,7 @@
 import {
+  type GenderKey,
   type HoroscopePalace,
+  type Language,
   type Palace as PalaceModel,
   type StarTransformation,
   ziwei,
@@ -17,17 +19,20 @@ import Stars from "./Stars";
 export interface DestinyBoardProps {
   width?: number;
   height?: number;
+  name: string;
+  date: string;
+  gender: GenderKey;
+  language?: Language;
 }
 
-const person = ziwei.byLunisolar({
-  name: "xxx",
-  // date: "1995-9-7-11",
-  date: "1984-7-15-1",
-  gender: "female",
-  language: "zh-Hant",
-});
-
-export default function DestinyBoard({ width = 600, height = 600 }: DestinyBoardProps) {
+export default function DestinyBoard({
+  width = 600,
+  height = 600,
+  name,
+  date,
+  gender,
+  language,
+}: DestinyBoardProps) {
   const {
     boardSide,
     boardX,
@@ -58,6 +63,16 @@ export default function DestinyBoard({ width = 600, height = 600 }: DestinyBoard
     centralPalaceX,
     centralPalaceY,
   } = use(ConfigContext);
+
+  const [person] = useState(() =>
+    ziwei.byLunisolar({
+      name,
+      date,
+      gender,
+      language,
+    }),
+  );
+
   const [horoscopeIndex, setHoroscopeIndex] = useState<number>(person.horoscope.index);
   const [horoscope, setHoroscope] = useState<HoroscopePalace[]>(person.horoscope.palaces);
 
@@ -123,7 +138,7 @@ export default function DestinyBoard({ width = 600, height = 600 }: DestinyBoard
 
   const stars = useMemo(() => {
     return person.palaces.map((item) => item.majorStars.concat(item.minorStars));
-  }, []);
+  }, [person.palaces.map]);
 
   const starsTransformation = useMemo(() => {
     return stars.map((star) => {
@@ -487,13 +502,6 @@ export default function DestinyBoard({ width = 600, height = 600 }: DestinyBoard
           y={centralPalaceY}
           width={centralPalaceSide}
           height={centralPalaceSide}
-          name={person.name}
-          gender={person.gender}
-          fiveElementName={person.fiveElementName}
-          lunisolarDate={person.lunisolarDate}
-          solarDate={person.solarDate}
-          solarDateByTrue={person.solarDateByTrue}
-          sexagenaryCycleDate={person.sexagenaryCycleDate}
         />
       </g>
       <Activity mode={menuPosition.x > 0 && menuPosition.y > 0 ? "visible" : "hidden"}>

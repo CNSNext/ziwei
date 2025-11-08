@@ -10,6 +10,11 @@
 
 🚧 积极开发中...
 
+## 文档
+
+- [贡献指南 AGENTS.md](./AGENTS.md)
+- [核心算法说明](./docs/CORE_ALGORITHMS.md)
+
 ## 版权
 
 本项目根据 [MIT](https://github.com/lzm0x219/ziwei/blob/main/LICENSE) 开源许可证条款授权使用。

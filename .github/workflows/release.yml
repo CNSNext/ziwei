@@ -37,11 +37,11 @@ jobs:
         env:
           NODE_ENV: production
 
-      - name: Run tests
-        run: pnpm test
-
       - name: Build packages
         run: pnpm build
+
+      - name: Run tests
+        run: pnpm test
 
       - name: Create/Update Release PR
         uses: changesets/action@v1

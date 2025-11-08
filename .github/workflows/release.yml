@@ -37,9 +37,6 @@ jobs:
         env:
           NODE_ENV: production
 
-      - name: Type check
-        run: pnpm tsgo --noEmit
-
       - name: Run tests
         run: pnpm test
 

@@ -444,11 +444,16 @@ export function calculateHoroscope(
     const horoscopeMainPalaceIndex = palaces.findIndex(
       (palace) => age >= palace.horoscopeRanges[0] && age <= palace.horoscopeRanges[1],
     );
+
+    // 若当前大限找不到时，重置到本命宫的索引
+    const fixHoroscopeMainPalaceIndex =
+      horoscopeMainPalaceIndex === -1 ? 0 : horoscopeMainPalaceIndex;
+
     return createHoroscope({
-      index: horoscopeMainPalaceIndex === -1 ? 0 : horoscopeMainPalaceIndex,
+      index: fixHoroscopeMainPalaceIndex,
       palaces: calculateHoroscopePalaces(
         palaces,
-        horoscopeMainPalaceIndex,
+        fixHoroscopeMainPalaceIndex,
         birthYearBranchKey,
         birthYear,
       ),

@@ -59,15 +59,13 @@
     "require": "./dist/index.cjs"
   },
   "main": "./dist/index.js",
-  "jsdelivr": "dist/ziweijs.core.min.js",
-  "unpkg": "dist/ziweijs.core.min.js",
   "module": "./dist/index.js",
-  "browser": "dist/ziweijs.core.min.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist/"
   ],
   "dependencies": {
+    "@ziweijs/i18n": "workspace:*",
     "tyme4ts": "catalog:"
   },
   "devDependencies": {

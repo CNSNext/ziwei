@@ -59,10 +59,7 @@
     "require": "./dist/index.cjs"
   },
   "main": "./dist/index.js",
-  "jsdelivr": "dist/ziweijs.react.min.js",
-  "unpkg": "dist/ziweijs.react.min.js",
   "module": "./dist/index.js",
-  "browser": "dist/ziweijs.react.min.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist/"

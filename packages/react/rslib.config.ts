@@ -22,23 +22,6 @@ export default defineConfig({
         },
       },
     },
-    {
-      format: "umd",
-      umdName: "ZiWei",
-      output: {
-        filename: {
-          js: "ziwei.react.min.js",
-        },
-        externals: {
-          react: "react",
-          "react-dom": "react-dom",
-          ahooks: "ahooks",
-        },
-        distPath: {
-          root: "./dist",
-        },
-      },
-    },
   ],
   output: {
     target: "web",

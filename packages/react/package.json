@@ -1,6 +1,6 @@
 {
   "name": "@ziweijs/react",
-  "version": "0.0.0-devlopment",
+  "version": "0.1.1",
   "publishConfig": {
     "access": "public"
   },

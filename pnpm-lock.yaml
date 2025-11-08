@@ -142,6 +142,21 @@ importers:
         specifier: 'catalog:'
         version: 5.9.3
 
+  packages/i18n:
+    devDependencies:
+      '@microsoft/api-extractor':
+        specifier: 'catalog:'
+        version: 7.54.0(@types/node@24.6.1)
+      '@rslib/core':
+        specifier: 'catalog:'
+        version: 0.17.1(@microsoft/api-extractor@7.54.0(@types/node@24.6.1))(@typescript/native-preview@7.0.0-dev.20251108.1)(typescript@5.9.3)
+      '@typescript/native-preview':
+        specifier: 'catalog:'
+        version: 7.0.0-dev.20251108.1
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+
   packages/react:
     dependencies:
       '@ziweijs/core':
@@ -175,18 +190,6 @@ importers:
       '@types/react-dom':
         specifier: 'catalog:'
         version: 19.2.2(@types/react@19.2.2)
-      '@typescript/native-preview':
-        specifier: 'catalog:'
-        version: 7.0.0-dev.20251108.1
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
-
-  packages/i18n:
-    devDependencies:
-      '@rslib/core':
-        specifier: 'catalog:'
-        version: 0.17.1(@microsoft/api-extractor@7.54.0(@types/node@24.6.1))(@typescript/native-preview@7.0.0-dev.20251108.1)(typescript@5.9.3)
       '@typescript/native-preview':
         specifier: 'catalog:'
         version: 7.0.0-dev.20251108.1

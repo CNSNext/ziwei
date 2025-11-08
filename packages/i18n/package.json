@@ -43,6 +43,7 @@
   "devDependencies": {
     "@rslib/core": "catalog:",
     "@typescript/native-preview": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "@microsoft/api-extractor": "catalog:"
   }
 }

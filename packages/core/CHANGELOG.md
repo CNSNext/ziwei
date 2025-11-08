@@ -1,5 +1,11 @@
 # @ziweijs/core
 
+## 0.2.1
+
+### Patch Changes
+
+- [`034fc46`](https://github.com/lzm0x219/ziwei/commit/034fc46698130a7d764de133dad32ece995640cb) Thanks [@lzm0x219](https://github.com/lzm0x219)! - 修复当前大运不在范围时会报错的问题
+
 ## 0.2.0
 
 ### Minor Changes

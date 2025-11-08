@@ -24,20 +24,5 @@ export default defineConfig({
         },
       },
     },
-    {
-      format: "umd",
-      umdName: "ZiWei",
-      output: {
-        filename: {
-          js: "ziweijs.core.min.js",
-        },
-        externals: {
-          tyme4ts: "tyme4ts",
-        },
-        distPath: {
-          root: "./dist",
-        },
-      },
-    },
   ],
 });

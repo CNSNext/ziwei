@@ -7,6 +7,7 @@ import {
   calculateAstrolabeDateBySolar,
   calculateHourByIndex,
   calculateLunisolarDateBySolar,
+  calculateTrueSolarTime,
   getLunisolarDateText,
   getSolarDateText,
 } from "./tools/date";
@@ -21,33 +22,41 @@ export interface SolarParams {
   date: Date;
   /** 语言 */
   language?: Language;
-  // 出生地经度
-  // longitude?: number;
-  // 出生时区
-  // timezoneOffset?: number;
-  // 是否采用真太阳时计算 默认为 true
-  // useTrueSolarTime?: boolean;
+  /** 出生地经度 默认为116.38333 北京天安门 */
+  longitude?: number;
+  /** 出生时区 默认为 8，北京时区 */
+  timezoneOffset?: number;
+  /** 是否采用真太阳时计算 默认为 true */
+  useTrueSolarTime?: boolean;
 }
 
 /**
  * 通过阳历获取紫微斗数命盘信息
  */
 export function bySolar(params: SolarParams) {
-  const { name, gender, date, language } = params;
+  const {
+    name,
+    gender,
+    date,
+    language,
+    longitude = 116.38333,
+    useTrueSolarTime,
+    timezoneOffset = 8,
+  } = params;
 
   language && i18n.setCurrentLanguage(language);
 
   const globalConfigs = getGlobalConfigs();
-  // let currentSolarDate: Date = date;
-  // // 若有出生经度，计算真太阳时
-  // if (longitude) {
-  //   // 计算真太阳时
-  //   const trueSolarTime = calculateTrueSolarTime(date, longitude, timezoneOffset);
-  //   if (useTrueSolarTime) {
-  //     currentSolarDate = trueSolarTime;
-  //   }
-  // }
-  const lunarHour = calculateLunisolarDateBySolar(date);
+  let currentSolarDate: Date = date;
+  // 若有出生经度，计算真太阳时
+  if (longitude) {
+    // 计算真太阳时
+    const trueSolarTime = calculateTrueSolarTime(date, longitude, timezoneOffset);
+    if (useTrueSolarTime) {
+      currentSolarDate = trueSolarTime;
+    }
+  }
+  const lunarHour = calculateLunisolarDateBySolar(currentSolarDate);
   // 转阴历 - 通过阴历计算排盘数据：出生年干、年支、月数、日数、时数索引
   const { stemKey, branchKey, monthIndex, day, hourIndex } = calculateAstrolabeDateBySolar({
     date: lunarHour,
@@ -64,7 +73,7 @@ export function bySolar(params: SolarParams) {
     birthYearStemKey: stemKey,
     birthYearBranchKey: branchKey,
     solarDate: getSolarDateText(date),
-    solarDateByTrue: undefined,
+    solarDateByTrue: getSolarDateText(currentSolarDate),
     lunisolarDate: getLunisolarDateText(lunarHour, hourIndex),
     sexagenaryCycleDate: lunarHour.getEightChar().toString(),
   });

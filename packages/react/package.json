@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "description": "专业级北派紫微斗数排盘工具库",
+  "description": "基于 @ziweijs/core 的 React 紫微斗数命盘组件",
   "keywords": [
     "紫微斗数",
     "Ziwei",

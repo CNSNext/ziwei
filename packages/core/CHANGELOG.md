@@ -1,5 +1,11 @@
 # @ziweijs/core
 
+## 0.3.0
+
+### Minor Changes
+
+- [`0ebd6b2`](https://github.com/lzm0x219/ziwei/commit/0ebd6b2718f42b7832fd031aa8070b7bdfe18ffe) Thanks [@lzm0x219](https://github.com/lzm0x219)! - 支持真太阳时的计算与入参 ([#154](https://github.com/lzm0x219/ziwei/issues/154))
+
 ## 0.2.1
 
 ### Patch Changes

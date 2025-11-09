@@ -1,5 +1,12 @@
 # ziwei.js
 
+## 0.3.0
+
+### Patch Changes
+
+- Updated dependencies [[`0ebd6b2`](https://github.com/lzm0x219/ziwei/commit/0ebd6b2718f42b7832fd031aa8070b7bdfe18ffe)]:
+  - @ziweijs/core@0.3.0
+
 ## 0.2.1
 
 ### Patch Changes

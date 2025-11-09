@@ -201,6 +201,55 @@ export function calculateLunisolarDateBySolar(date: Date) {
 }
 
 /**
+ * 计算指定时间与经度对应的真太阳时。
+ *
+ * @param date - 基准时间（JavaScript Date，包含绝对 UTC 时间）
+ * @param longitude - 经度（东经为正，西经为负），单位：度
+ * @param timezoneOffsetMinutes - 时区偏移（分钟，默认取 `-date.getTimezoneOffset()`）
+ *
+ * @returns `TrueSolarTimeResult`，包含真太阳时对应的 `date`、时间方程以及修正值
+ *
+ * @remarks
+ * - 算法基于 NOAA 推荐公式：先计算日序数与当地时间的分数年角，
+ *   再求出时间方程（EoT），最后结合经度与时区偏差得到真太阳时。
+ * - 若未显式传入 `timezoneOffsetMinutes`，则默认使用环境运行时对 `date` 的解释结果，
+ *   在跨时区场景下建议明确传入对应地点的时区偏移。
+ */
+export function calculateTrueSolarTime(
+  date: Date,
+  longitude: number,
+  timezoneOffsetHours: number = -date.getTimezoneOffset() / 60,
+) {
+  const timezoneOffsetMinutes = timezoneOffsetHours * 60;
+  const localTime = new Date(date.getTime() + timezoneOffsetMinutes * 60_000);
+  const startOfYear = Date.UTC(localTime.getUTCFullYear(), 0, 0);
+  const dayOfYear = Math.floor((localTime.getTime() - startOfYear) / 86_400_000);
+  const minutesPastMidnight =
+    localTime.getUTCHours() * 60 +
+    localTime.getUTCMinutes() +
+    localTime.getUTCSeconds() / 60 +
+    localTime.getUTCMilliseconds() / 60000;
+
+  // NOAA 建议的分数年角（弧度）
+  const gamma = (2 * Math.PI * (dayOfYear - 1 + minutesPastMidnight / 1440)) / 365;
+
+  // 时间方程（单位：分钟）
+  const equationOfTime =
+    229.18 *
+    (0.000075 +
+      0.001868 * Math.cos(gamma) -
+      0.032077 * Math.sin(gamma) -
+      0.014615 * Math.cos(2 * gamma) -
+      0.040849 * Math.sin(2 * gamma));
+
+  // 经度与时区修正（分钟），4min 对应 1° 经度
+  const longitudeCorrection = 4 * longitude;
+  const correctionMinutes = equationOfTime + longitudeCorrection - timezoneOffsetMinutes;
+
+  return new Date(date.getTime() + correctionMinutes * 60_000);
+}
+
+/**
  * 根据公历年份计算对应的天干地支索引。
  *
  * 天干地支是中国传统纪年法的一部分，每年对应一个天干（10 个）和一个地支（12 个）。

@@ -1,11 +1,12 @@
 import { LunarHour, SolarTime } from "tyme4ts";
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import { type GlobalConfigs, getGlobalConfigs } from "../../configs";
 import {
   calculateAstrolabeDate,
   calculateAstrolabeDateBySolar,
   calculateHourByIndex,
   calculateLunisolarDateBySolar,
+  calculateTrueSolarTime,
   fixLateZiHour,
   fixLeapMonth,
   getLunisolarDateText,
@@ -367,6 +368,47 @@ describe("calculateHourByIndex()", () => {
   });
 });
 
-// describe("calculateEquationOfTime()", () => {
-//   //
-// });
+describe("calculateTrueSolarTime()", () => {
+  const MINUTE = 60 * 1000;
+
+  test("东经更大的城市应获得更晚的真太阳时", () => {
+    const date = new Date("2024-03-20T04:00:00Z");
+    const beijing = calculateTrueSolarTime(date, 116.397, 8);
+    const shanghai = calculateTrueSolarTime(date, 121.474, 8);
+    const diffMinutes = (shanghai.getTime() - beijing.getTime()) / MINUTE;
+    const expected = (121.474 - 116.397) * 4;
+    expect(diffMinutes).toBeGreaterThan(expected - 1);
+    expect(diffMinutes).toBeLessThan(expected + 1);
+  });
+
+  test("不同经度且不同标准时区时仍保持一致的相对偏差", () => {
+    const baseDate = new Date("2024-06-21T00:00:00Z");
+    const lonLondon = -0.1276;
+    const lonNewYork = -74.006;
+    const tzLondon = 0;
+    const tzNewYork = -4;
+    const london = calculateTrueSolarTime(baseDate, lonLondon, tzLondon);
+    const newYork = calculateTrueSolarTime(baseDate, lonNewYork, tzNewYork);
+    const deltaMinutes = Math.abs(london.getTime() - newYork.getTime()) / MINUTE;
+    const expected = Math.abs(4 * (lonLondon - lonNewYork) - (tzLondon - tzNewYork) * 60);
+    expect(deltaMinutes).toBeGreaterThan(expected - 1);
+    expect(deltaMinutes).toBeLessThan(expected + 1);
+  });
+
+  test("未显式传入时区时应使用 Date 自带偏移", () => {
+    const sample = new Date("2024-06-21T10:30:00+03:00");
+    const longitude = 37.6173;
+    const spy = vi.spyOn(Date.prototype, "getTimezoneOffset").mockReturnValue(-180);
+    const manual = calculateTrueSolarTime(sample, longitude, 3);
+    const auto = calculateTrueSolarTime(sample, longitude);
+    expect(auto.getTime()).toBeCloseTo(manual.getTime(), 6);
+    spy.mockRestore();
+  });
+
+  test("函数不应修改原始日期对象", () => {
+    const date = new Date("2024-01-01T12:00:00Z");
+    const clone = new Date(date.getTime());
+    calculateTrueSolarTime(date, 0, 0);
+    expect(date.getTime()).toBe(clone.getTime());
+  });
+});

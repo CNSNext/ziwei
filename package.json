@@ -16,7 +16,7 @@
     "@changesets/changelog-github": "0.5.1",
     "@changesets/cli": "catalog:",
     "@microsoft/api-extractor": "catalog:",
-    "@moonrepo/cli": "1.41.6",
+    "@moonrepo/cli": "1.41.7",
     "@rslib/core": "catalog:",
     "@typescript/native-preview": "catalog:",
     "@vitejs/plugin-react": "catalog:",

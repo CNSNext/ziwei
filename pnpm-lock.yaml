@@ -13,8 +13,8 @@ catalogs:
       specifier: 2.29.7
       version: 2.29.7
     '@microsoft/api-extractor':
-      specifier: 7.54.0
-      version: 7.54.0
+      specifier: 7.55.0
+      version: 7.55.0
     '@rsbuild/core':
       specifier: 1.6.4
       version: 1.6.4
@@ -82,13 +82,13 @@ importers:
         version: 2.29.7(@types/node@24.6.1)
       '@microsoft/api-extractor':
         specifier: 'catalog:'
-        version: 7.54.0(@types/node@24.6.1)
+        version: 7.55.0(@types/node@24.6.1)
       '@moonrepo/cli':
         specifier: 1.41.7
         version: 1.41.7
       '@rslib/core':
         specifier: 'catalog:'
-        version: 0.17.1(@microsoft/api-extractor@7.54.0(@types/node@24.6.1))(@typescript/native-preview@7.0.0-dev.20251110.1)(typescript@5.9.3)
+        version: 0.17.1(@microsoft/api-extractor@7.55.0(@types/node@24.6.1))(@typescript/native-preview@7.0.0-dev.20251110.1)(typescript@5.9.3)
       '@typescript/native-preview':
         specifier: 'catalog:'
         version: 7.0.0-dev.20251110.1
@@ -131,10 +131,10 @@ importers:
     devDependencies:
       '@microsoft/api-extractor':
         specifier: 'catalog:'
-        version: 7.54.0(@types/node@24.6.1)
+        version: 7.55.0(@types/node@24.6.1)
       '@rslib/core':
         specifier: 'catalog:'
-        version: 0.17.1(@microsoft/api-extractor@7.54.0(@types/node@24.6.1))(@typescript/native-preview@7.0.0-dev.20251110.1)(typescript@5.9.3)
+        version: 0.17.1(@microsoft/api-extractor@7.55.0(@types/node@24.6.1))(@typescript/native-preview@7.0.0-dev.20251110.1)(typescript@5.9.3)
       '@typescript/native-preview':
         specifier: 'catalog:'
         version: 7.0.0-dev.20251110.1
@@ -146,10 +146,10 @@ importers:
     devDependencies:
       '@microsoft/api-extractor':
         specifier: 'catalog:'
-        version: 7.54.0(@types/node@24.6.1)
+        version: 7.55.0(@types/node@24.6.1)
       '@rslib/core':
         specifier: 'catalog:'
-        version: 0.17.1(@microsoft/api-extractor@7.54.0(@types/node@24.6.1))(@typescript/native-preview@7.0.0-dev.20251110.1)(typescript@5.9.3)
+        version: 0.17.1(@microsoft/api-extractor@7.55.0(@types/node@24.6.1))(@typescript/native-preview@7.0.0-dev.20251110.1)(typescript@5.9.3)
       '@typescript/native-preview':
         specifier: 'catalog:'
         version: 7.0.0-dev.20251110.1
@@ -174,7 +174,7 @@ importers:
     devDependencies:
       '@microsoft/api-extractor':
         specifier: 'catalog:'
-        version: 7.54.0(@types/node@24.6.1)
+        version: 7.55.0(@types/node@24.6.1)
       '@rsbuild/core':
         specifier: 'catalog:'
         version: 1.6.4
@@ -183,7 +183,7 @@ importers:
         version: 1.4.2(@rsbuild/core@1.6.4)
       '@rslib/core':
         specifier: 'catalog:'
-        version: 0.17.1(@microsoft/api-extractor@7.54.0(@types/node@24.6.1))(@typescript/native-preview@7.0.0-dev.20251110.1)(typescript@5.9.3)
+        version: 0.17.1(@microsoft/api-extractor@7.55.0(@types/node@24.6.1))(@typescript/native-preview@7.0.0-dev.20251110.1)(typescript@5.9.3)
       '@types/react':
         specifier: 'catalog:'
         version: 19.2.4
@@ -205,10 +205,10 @@ importers:
     devDependencies:
       '@microsoft/api-extractor':
         specifier: 'catalog:'
-        version: 7.54.0(@types/node@24.6.1)
+        version: 7.55.0(@types/node@24.6.1)
       '@rslib/core':
         specifier: 'catalog:'
-        version: 0.17.1(@microsoft/api-extractor@7.54.0(@types/node@24.6.1))(@typescript/native-preview@7.0.0-dev.20251110.1)(typescript@5.9.3)
+        version: 0.17.1(@microsoft/api-extractor@7.55.0(@types/node@24.6.1))(@typescript/native-preview@7.0.0-dev.20251110.1)(typescript@5.9.3)
       '@typescript/native-preview':
         specifier: 'catalog:'
         version: 7.0.0-dev.20251110.1
@@ -685,18 +685,18 @@ packages:
   '@manypkg/get-packages@1.1.3':
     resolution: {integrity: sha512-fo+QhuU3qE/2TQMQmbVMqaQ6EWbMhi4ABWP+O4AM1NqPBuy0OrApV5LO6BrrgnhtAHS2NH6RrVk9OL181tTi8A==}
 
-  '@microsoft/api-extractor-model@7.31.3':
-    resolution: {integrity: sha512-dv4quQI46p0U03TCEpasUf6JrJL3qjMN7JUAobsPElxBv4xayYYvWW9aPpfYV+Jx6hqUcVaLVOeV7+5hxsyoFQ==}
+  '@microsoft/api-extractor-model@7.32.0':
+    resolution: {integrity: sha512-QIVJSreb8fGGJy1Qx0yzGVXxvHJN1WXgkFNHFheVv1iBJNqgvp+xeT3ienJmRwXmPPc5Es/cxBrXtKZJR3i7iw==}
 
-  '@microsoft/api-extractor@7.54.0':
-    resolution: {integrity: sha512-t0SEcbVUPy4yAVykPafTNWktBg728X6p9t8qCuGDsYr1/lz2VQFihYDP2CnBFSArP5vwJPcvxktoKVSqH326cA==}
+  '@microsoft/api-extractor@7.55.0':
+    resolution: {integrity: sha512-TYc5OtAK/9E3HGgd2bIfSjQDYIwPc0dysf9rPiwXZGsq916I6W2oww9bhm1OxPOeg6rMfOX3PoroGd7oCryYog==}
     hasBin: true
 
-  '@microsoft/tsdoc-config@0.17.1':
-    resolution: {integrity: sha512-UtjIFe0C6oYgTnad4q1QP4qXwLhe6tIpNTRStJ2RZEPIkqQPREAwE5spzVxsdn9UaEMUqhh0AqSx3X4nWAKXWw==}
+  '@microsoft/tsdoc-config@0.18.0':
+    resolution: {integrity: sha512-8N/vClYyfOH+l4fLkkr9+myAoR6M7akc8ntBJ4DJdWH2b09uVfr71+LTMpNyG19fNqWDg8KEDZhx5wxuqHyGjw==}
 
-  '@microsoft/tsdoc@0.15.1':
-    resolution: {integrity: sha512-4aErSrCR/On/e5G2hDP0wjooqDdauzEbIq8hIkIe5pXV0rtWJZvdCEKL0ykZxex+IxIwBp0eGeV48hQN07dXtw==}
+  '@microsoft/tsdoc@0.16.0':
+    resolution: {integrity: sha512-xgAyonlVVS+q7Vc7qLW0UrJU7rSFcETRWsqdXZtjzRU8dF+6CkozTK4V4y1LwOX7j8r/vHphjDeMeGI4tNGeGA==}
 
   '@module-federation/error-codes@0.21.2':
     resolution: {integrity: sha512-mGbPAAApgjmQUl4J7WAt20aV04a26TyS21GDEpOGXFEQG5FqmZnSJ6FqB8K19HgTKioBT1+fF/Ctl5bGGao/EA==}
@@ -2681,19 +2681,19 @@ snapshots:
       globby: 11.1.0
       read-yaml-file: 1.1.0
 
-  '@microsoft/api-extractor-model@7.31.3(@types/node@24.6.1)':
+  '@microsoft/api-extractor-model@7.32.0(@types/node@24.6.1)':
     dependencies:
-      '@microsoft/tsdoc': 0.15.1
-      '@microsoft/tsdoc-config': 0.17.1
+      '@microsoft/tsdoc': 0.16.0
+      '@microsoft/tsdoc-config': 0.18.0
       '@rushstack/node-core-library': 5.18.0(@types/node@24.6.1)
     transitivePeerDependencies:
       - '@types/node'
 
-  '@microsoft/api-extractor@7.54.0(@types/node@24.6.1)':
+  '@microsoft/api-extractor@7.55.0(@types/node@24.6.1)':
     dependencies:
-      '@microsoft/api-extractor-model': 7.31.3(@types/node@24.6.1)
-      '@microsoft/tsdoc': 0.15.1
-      '@microsoft/tsdoc-config': 0.17.1
+      '@microsoft/api-extractor-model': 7.32.0(@types/node@24.6.1)
+      '@microsoft/tsdoc': 0.16.0
+      '@microsoft/tsdoc-config': 0.18.0
       '@rushstack/node-core-library': 5.18.0(@types/node@24.6.1)
       '@rushstack/rig-package': 0.6.0
       '@rushstack/terminal': 0.19.3(@types/node@24.6.1)
@@ -2708,14 +2708,14 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
 
-  '@microsoft/tsdoc-config@0.17.1':
+  '@microsoft/tsdoc-config@0.18.0':
     dependencies:
-      '@microsoft/tsdoc': 0.15.1
+      '@microsoft/tsdoc': 0.16.0
       ajv: 8.12.0
       jju: 1.4.0
       resolve: 1.22.10
 
-  '@microsoft/tsdoc@0.15.1': {}
+  '@microsoft/tsdoc@0.16.0': {}
 
   '@module-federation/error-codes@0.21.2': {}
 
@@ -2913,12 +2913,12 @@ snapshots:
     transitivePeerDependencies:
       - webpack-hot-middleware
 
-  '@rslib/core@0.17.1(@microsoft/api-extractor@7.54.0(@types/node@24.6.1))(@typescript/native-preview@7.0.0-dev.20251110.1)(typescript@5.9.3)':
+  '@rslib/core@0.17.1(@microsoft/api-extractor@7.55.0(@types/node@24.6.1))(@typescript/native-preview@7.0.0-dev.20251110.1)(typescript@5.9.3)':
     dependencies:
       '@rsbuild/core': 1.6.2
-      rsbuild-plugin-dts: 0.17.1(@microsoft/api-extractor@7.54.0(@types/node@24.6.1))(@rsbuild/core@1.6.2)(@typescript/native-preview@7.0.0-dev.20251110.1)(typescript@5.9.3)
+      rsbuild-plugin-dts: 0.17.1(@microsoft/api-extractor@7.55.0(@types/node@24.6.1))(@rsbuild/core@1.6.2)(@typescript/native-preview@7.0.0-dev.20251110.1)(typescript@5.9.3)
     optionalDependencies:
-      '@microsoft/api-extractor': 7.54.0(@types/node@24.6.1)
+      '@microsoft/api-extractor': 7.55.0(@types/node@24.6.1)
       typescript: 5.9.3
     transitivePeerDependencies:
       - '@typescript/native-preview'
@@ -3838,12 +3838,12 @@ snapshots:
       '@rollup/rollup-win32-x64-msvc': 4.52.5
       fsevents: 2.3.3
 
-  rsbuild-plugin-dts@0.17.1(@microsoft/api-extractor@7.54.0(@types/node@24.6.1))(@rsbuild/core@1.6.2)(@typescript/native-preview@7.0.0-dev.20251110.1)(typescript@5.9.3):
+  rsbuild-plugin-dts@0.17.1(@microsoft/api-extractor@7.55.0(@types/node@24.6.1))(@rsbuild/core@1.6.2)(@typescript/native-preview@7.0.0-dev.20251110.1)(typescript@5.9.3):
     dependencies:
       '@ast-grep/napi': 0.37.0
       '@rsbuild/core': 1.6.2
     optionalDependencies:
-      '@microsoft/api-extractor': 7.54.0(@types/node@24.6.1)
+      '@microsoft/api-extractor': 7.55.0(@types/node@24.6.1)
       '@typescript/native-preview': 7.0.0-dev.20251110.1
       typescript: 5.9.3
 

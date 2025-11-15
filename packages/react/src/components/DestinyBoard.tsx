@@ -1,12 +1,13 @@
 import {
+  createZiWeiByLunisolar,
+  type DecadeVO,
   type GenderKey,
-  type HoroscopePalace,
-  type Language,
+  i18n,
+  type Locale,
   type Palace as PalaceModel,
-  type StarTransformation,
-  ziwei,
+  type TransformationKey,
 } from "@ziweijs/core";
-import { Activity, use, useMemo, useRef, useState } from "react";
+import { Activity, use, useRef, useState } from "react";
 import { ConfigContext } from "../context/config";
 import { RuntimeContainer } from "../hooks/runtime";
 import ArrowLine from "./ArrowLine";
@@ -22,7 +23,7 @@ export interface DestinyBoardProps {
   name: string;
   date: string;
   gender: GenderKey;
-  language?: Language;
+  language?: Locale;
 }
 
 export default function DestinyBoard({
@@ -64,23 +65,22 @@ export default function DestinyBoard({
     centralPalaceY,
   } = use(ConfigContext);
 
-  const [person] = useState(() =>
-    ziwei.byLunisolar({
+  const [natal] = useState(() =>
+    createZiWeiByLunisolar({
       name,
       date,
       gender,
       language,
     }),
   );
-
-  const [horoscopeIndex, setHoroscopeIndex] = useState<number>(person.horoscope.index);
-  const [horoscope, setHoroscope] = useState<HoroscopePalace[]>(person.horoscope.palaces);
+  const [decadeIndex, setDecadeIndex] = useState<number>(natal.getDecadeIndex());
+  const [decade, setDecade] = useState<DecadeVO[]>(natal.decade);
 
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
 
   const ref = useRef(null);
 
-  const selectedRef = useRef<number>(person.horoscope.index);
+  const selectedRef = useRef<number>(decadeIndex);
 
   const coordinates = [
     {
@@ -135,21 +135,6 @@ export default function DestinyBoard({
 
   const { flyingPalaceKey, setFlyingPalaceKey, setFlyingTransformations } =
     RuntimeContainer.useContainer();
-
-  const stars = useMemo(() => {
-    return person.palaces.map((item) => item.majorStars.concat(item.minorStars));
-  }, [person.palaces.map]);
-
-  const starsTransformation = useMemo(() => {
-    return stars.map((star) => {
-      return star.reduce<StarTransformation[]>((result, star) => {
-        if (star.ST?.CP) {
-          result.push(star.ST?.CP);
-        }
-        return result;
-      }, []);
-    });
-  }, [stars]);
 
   const _CP: Array<{
     points: [number, number][];
@@ -300,7 +285,7 @@ export default function DestinyBoard({
     if (flyingPalaceKey === palace.key) {
       return palaceFlyFill;
     }
-    if (horoscopeIndex === palace.index) {
+    if (decadeIndex === palace.index) {
       return palaceHoroscopeFill;
     }
     return boardFill;
@@ -320,9 +305,16 @@ export default function DestinyBoard({
           stroke={boardStroke}
           strokeWidth={boardStrokeWidth}
         />
-        {person.palaces.map((palace, index) => {
-          const currentTransformations = starsTransformation[index];
-
+        {natal.palaces.map((palace, index) => {
+          const currentTransformations = palace.stars.reduce<TransformationKey[]>(
+            (result, star) => {
+              if (star.ST?.entry) {
+                result.push(star.ST.entry.key);
+              }
+              return result;
+            },
+            [],
+          );
           const hasCP = currentTransformations.length > 0;
 
           return (
@@ -339,7 +331,7 @@ export default function DestinyBoard({
                   setFlyingTransformations([]);
                   setFlyingPalaceKey(undefined);
                 } else {
-                  setFlyingTransformations(palace.$starKeysByFlying());
+                  setFlyingTransformations(palace.flying());
                   setFlyingPalaceKey(palace.key);
                 }
               }}
@@ -384,8 +376,8 @@ export default function DestinyBoard({
                   letterSpacing={0}
                   wordSpacing={0}
                 >
-                  {palace.stem}
-                  {palace.branch}
+                  {palace.stem.name}
+                  {palace.branch.name}
                 </text>
               </svg>
               {/* 宫位信息 - 大限宫职 */}
@@ -408,7 +400,7 @@ export default function DestinyBoard({
                   letterSpacing={0}
                   wordSpacing={0}
                 >
-                  {horoscope[index]?.palaceName}
+                  {decade[index].name}
                 </text>
               </svg>
               {/* 宫位信息 - 运限间隔 */}
@@ -430,7 +422,7 @@ export default function DestinyBoard({
                   letterSpacing={0}
                   wordSpacing={0}
                 >
-                  {palace.horoscopeRanges.join(" ~ ")}
+                  {palace.decadeRanges.join(" ~ ")}
                 </text>
               </svg>
               {/* 宫位信息 - 原局宫职 */}
@@ -455,7 +447,7 @@ export default function DestinyBoard({
                 </text>
               </svg>
               {/* 流年 */}
-              {horoscope[index]?.yearlyText && (
+              {decade[index].yearly.age > 0 && (
                 <text
                   x={palaceSide / 2}
                   y={verticalRectHeight * 2 - yearlyFontSize / 2}
@@ -464,7 +456,7 @@ export default function DestinyBoard({
                   wordSpacing={0}
                   textAnchor="middle"
                 >
-                  {horoscope[index].yearlyText}
+                  {`${decade[index].yearly.name}${i18n.$t("year")}${decade[index].yearly.age}${i18n.$t("age")}`}
                 </text>
               )}
               {/* 星辰信息 */}
@@ -472,7 +464,7 @@ export default function DestinyBoard({
                 x={palaceSide - palacePadding - fontSize * fontLineHeight}
                 y={palacePadding}
                 palace={palace}
-                data={stars[index]}
+                data={palace.stars}
               />
               {/* 向心自化部分 */}
               {hasCP && _CP[index] && (
@@ -490,7 +482,7 @@ export default function DestinyBoard({
                     fill={selfTransformationStroke}
                     textAnchor="middle"
                   >
-                    {currentTransformations.map((item) => item.key).join("")}
+                    {currentTransformations.join("")}
                   </text>
                 </g>
               )}
@@ -512,8 +504,8 @@ export default function DestinyBoard({
             {
               label: "入限",
               onClick: () => {
-                setHoroscope(person.getHoroscope(selectedRef.current).palaces);
-                setHoroscopeIndex(selectedRef.current);
+                setDecade(natal.getDecade(selectedRef.current));
+                setDecadeIndex(selectedRef.current);
               },
             },
           ]}

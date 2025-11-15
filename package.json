@@ -22,6 +22,7 @@
     "@vitejs/plugin-react": "catalog:",
     "@vitest/browser-playwright": "catalog:",
     "@vitest/coverage-v8": "catalog:",
+    "@vitest/ui": "4.0.9",
     "is-ci": "catalog:",
     "lefthook": "catalog:",
     "sort-package-json": "catalog:",

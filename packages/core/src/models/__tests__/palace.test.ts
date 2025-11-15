@@ -1,65 +1,20 @@
-import { describe, expect, test } from "vitest";
-import i18n from "../../i18n";
-import type { BranchName, PalaceProps, StemName } from "../../typings";
+import { describe, expect, it } from "vitest";
+import { STEM_TRANSFORMATIONS } from "../../constants";
 import { createPalace } from "../palace";
 
-describe("createPalace 宫位对象创建测试", () => {
-  /**
-   * 基础功能验证：传入完整属性时，应返回包含所有属性的Star对象
-   */
-  test("传入完整PalaceProps时，应返回包含所有属性的星曜对象", () => {
-    // 定义测试用的星曜属性
-    const testProps: PalaceProps = {
+describe("models/palace", () => {
+  it("flying() 返回对应天干的四化星数组", () => {
+    const palace = createPalace({
       index: 0,
-      key: "CAI_BO",
-      name: "财帛",
+      key: "Ming",
+      name: "命宫",
       isLaiYin: false,
-      stem: i18n.$t(`stem.BING`) as StemName,
-      stemKey: "BING",
-      branch: i18n.$t(`branch.CHEN.name`) as BranchName,
-      branchKey: "CHEN",
-      majorStars: [],
-      minorStars: [],
-      horoscopeRanges: [2, 11],
-    };
+      stem: { key: "Jia", name: "甲" },
+      branch: { key: "Zi", name: "子" },
+      stars: [],
+      decadeRanges: [1, 10],
+    });
 
-    // 调用函数创建星曜
-    const palace = createPalace(testProps);
-
-    // 验证返回对象的类型和属性完整性
-    expect(palace).toBeInstanceOf(Object); // 是对象类型
-    expect(palace).toHaveProperty("index", 0);
-    expect(palace).toHaveProperty("key", "CAI_BO");
-    expect(palace).toHaveProperty("name", "财帛");
-    expect(palace).toHaveProperty("isLaiYin", false);
-    expect(palace).toHaveProperty("stem", "丙");
-    expect(palace).toHaveProperty("stemKey", "BING");
-    expect(palace).toHaveProperty("branch", "辰");
-    expect(palace).toHaveProperty("branchKey", "CHEN");
-    expect(palace).toHaveProperty("majorStars", []);
-    expect(palace).toHaveProperty("minorStars", []);
-    expect(palace).toHaveProperty("horoscopeRanges", [2, 11]);
-    expect(typeof palace.$starKeysByFlying).toBe("function");
-  });
-
-  test("$starKeysByFlying 方法应该返回正确的飞宫四化", () => {
-    const testProps: PalaceProps = {
-      index: 0,
-      key: "CAI_BO",
-      name: "财帛",
-      isLaiYin: false,
-      stem: i18n.$t(`stem.BING`) as StemName,
-      stemKey: "BING",
-      branch: i18n.$t(`branch.CHEN.name`) as BranchName,
-      branchKey: "CHEN",
-      majorStars: [],
-      minorStars: [],
-      horoscopeRanges: [2, 11],
-    };
-    // 执行函数
-    const palace = createPalace(testProps);
-
-    // 验证 $starKeysByFlying 方法返回正确的结果
-    expect(palace.$starKeysByFlying()).toEqual(["TIAN_TONG", "TIAN_JI", "WEN_CHANG", "LIAN_ZHEN"]);
+    expect(palace.flying()).toEqual(STEM_TRANSFORMATIONS.Jia);
   });
 });

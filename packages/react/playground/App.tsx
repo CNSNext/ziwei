@@ -8,8 +8,8 @@ export default function App() {
         width={600}
         height={600}
         name="xx"
-        date="1982-1-10-2"
-        gender="male"
+        date="1998-1-23-1"
+        gender="Yang"
         language="zh-Hant"
       />
     </div>

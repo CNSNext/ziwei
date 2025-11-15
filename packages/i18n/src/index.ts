@@ -1,6 +1,9 @@
 /** 语言资源映射：键为语言标识，值为任意层级的字典。 */
 type ResourceMap = Record<string, Record<string, unknown>>;
 
+/** 扁平化后的资源映射。 */
+type FlatResourceMap = Record<string, Record<string, string>>;
+
 /** 默认的缺省文案。 */
 const DEFAULT_FALLBACK_TEXT = "Missing translation";
 
@@ -12,7 +15,6 @@ const toArray = <T>(value?: T | readonly T[]): readonly T[] => {
   if (value === undefined) {
     return [];
   }
-
   return Array.isArray(value) ? (value as readonly T[]) : ([value] as readonly T[]);
 };
 
@@ -22,35 +24,101 @@ const sanitizeFallbacks = <Lang extends string>(
   available: readonly Lang[],
 ): Lang[] => {
   const unique = new Set<Lang>();
-
   for (const candidate of toArray(value)) {
     if (available.includes(candidate) && !unique.has(candidate)) {
       unique.add(candidate);
     }
   }
-
   return Array.from(unique);
 };
 
 /** 判断某个值是否为可遍历的对象。 */
 const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === "object" && value !== null;
+  typeof value === "object" && value !== null && !Array.isArray(value);
 
-/** 根据层级键数组递归取值，若最终拿到字符串则返回。 */
-const resolveSegments = (
-  resource: DeepReadonly<Record<string, unknown>>,
-  segments: readonly string[],
-): string | undefined => {
-  let value: unknown = resource;
-
-  for (const segment of segments) {
-    if (!isRecord(value) || !(segment in value)) {
-      return undefined;
+/**
+ * 扁平化嵌套对象为点分隔的键值对。
+ */
+const flattenObject = (
+  obj: Record<string, unknown>,
+  prefix: string = "",
+  separator: string = DEFAULT_SEPARATOR,
+  legacySeparator: string = DEFAULT_SEPARATOR,
+): Record<string, string> => {
+  const result: Record<string, string> = {};
+  for (const key in obj) {
+    if (!Object.hasOwn(obj, key)) {
+      continue;
     }
-    value = (value as Record<string, unknown>)[segment];
+    const value = obj[key];
+    const newKey = prefix ? `${prefix}${separator}${key}` : key;
+    if (isRecord(value)) {
+      Object.assign(result, flattenObject(value, newKey, separator, legacySeparator));
+    } else if (typeof value === "string") {
+      result[newKey] = value;
+      if (separator !== legacySeparator && newKey.includes(separator)) {
+        const legacyKey = newKey.split(separator).join(legacySeparator);
+        if (!(legacyKey in result)) {
+          result[legacyKey] = value;
+        }
+      }
+    }
   }
+  return result;
+};
 
-  return typeof value === "string" ? value : undefined;
+/**
+ * 检测资源对象是否已经是扁平结构。
+ */
+const isFlatResource = (resource: Record<string, unknown>): boolean => {
+  for (const key in resource) {
+    if (!Object.hasOwn(resource, key)) {
+      continue;
+    }
+    const value = resource[key];
+    if (typeof value !== "string") {
+      return false;
+    }
+  }
+  return true;
+};
+
+/**
+ * 扁平化所有语言资源。
+ */
+const flattenResources = (
+  resources: ResourceMap,
+  separator: string = DEFAULT_SEPARATOR,
+  legacySeparator: string = DEFAULT_SEPARATOR,
+): FlatResourceMap => {
+  const result: FlatResourceMap = {};
+  for (const lang in resources) {
+    if (!Object.hasOwn(resources, lang)) {
+      continue;
+    }
+    const resource = resources[lang];
+    if (isFlatResource(resource)) {
+      const flat = resource as Record<string, string>;
+      if (separator !== legacySeparator) {
+        const augmented: Record<string, string> = { ...flat };
+        for (const key in flat) {
+          if (!Object.hasOwn(flat, key) || !key.includes(separator)) {
+            continue;
+          }
+          const legacyKey = key.split(separator).join(legacySeparator);
+          if (!(legacyKey in augmented)) {
+            augmented[legacyKey] = flat[key];
+          }
+        }
+        result[lang] = augmented;
+      } else {
+        result[lang] = flat;
+      }
+    } else {
+      result[lang] = flattenObject(resource, "", separator, legacySeparator);
+    }
+  }
+  return result;
 };
 
 /** 构建最终的语言尝试顺序：当前语言优先，再按回退链依次尝试。 */
@@ -66,6 +134,21 @@ const buildSearchOrder = <Lang extends string>(
   }
   return result;
 };
+
+/**
+ * 根据点分隔的路径从对象中提取值类型。
+ */
+export type GetValueByPath<
+  T,
+  Path extends string,
+  Separator extends string = ".",
+> = Path extends `${infer First}${Separator}${infer Rest}`
+  ? First extends keyof T
+    ? GetValueByPath<T[First], Rest, Separator>
+    : never
+  : Path extends keyof T
+    ? T[Path]
+    : never;
 
 /** 计算资源对象的所有嵌套键。 */
 export type NestedKeyOf<T, Depth extends number = 5> = [Depth] extends [never]
@@ -100,7 +183,7 @@ export interface MissingTranslationInfo<Lang extends string> {
 export interface I18nCreateOptions<TResourcesMap extends ResourceMap> {
   /** 默认语言。 */
   lang: LanguageKey<TResourcesMap>;
-  /** 语言资源。 */
+  /** 语言资源（支持嵌套或扁平结构）。 */
   resources: TResourcesMap;
   /** 默认缺失文案。 */
   fallback?: string;
@@ -110,57 +193,77 @@ export interface I18nCreateOptions<TResourcesMap extends ResourceMap> {
   separator?: string;
   /** 缺失文案时的回调。 */
   onMissing?: (info: MissingTranslationInfo<LanguageKey<TResourcesMap>>) => void;
+  /** 是否启用缓存（默认 true）。 */
+  cache?: boolean;
 }
 
+/**
+ * I18n 实例接口（完全类型安全）。
+ */
 export interface I18n<TResourcesMap extends ResourceMap> {
   /**
-   * 获取翻译文本。
-   *
-   * @param key - 翻译键，支持嵌套路径。
-   * @param defaultValue - 可选的兜底文本，优先级高于全局 fallback。
+   * 获取翻译文本（不带默认值）。
    */
-  $t(key: TranslationKey<TResourcesMap>, defaultValue?: string): string;
+  $t<K extends TranslationKey<TResourcesMap>>(
+    key: K,
+  ): GetValueByPath<TResourcesMap[LanguageKey<TResourcesMap>], K> extends string
+    ? GetValueByPath<TResourcesMap[LanguageKey<TResourcesMap>], K>
+    : string;
+
+  /**
+   * 获取翻译文本（带默认值）。
+   */
+  $t<K extends TranslationKey<TResourcesMap>, D extends string>(
+    key: K,
+    defaultValue: D,
+  ): GetValueByPath<TResourcesMap[LanguageKey<TResourcesMap>], K> extends string
+    ? GetValueByPath<TResourcesMap[LanguageKey<TResourcesMap>], K> | D
+    : D;
+
   /**
    * 判断某个键在当前或指定语言中是否存在。
-   *
-   * @param key - 待检查的翻译键。
-   * @param lang - 可选指定语言，不传则按回退链查找。
    */
   has(key: TranslationKey<TResourcesMap>, lang?: LanguageKey<TResourcesMap>): boolean;
+
   /** 获取当前语言。 */
   getCurrentLanguage(): LanguageKey<TResourcesMap>;
+
   /**
    * 设置当前语言。
-   *
-   * @param lang - 目标语言，必须存在于 resources 中。
    */
   setCurrentLanguage(lang: LanguageKey<TResourcesMap>): void;
+
   /** 列出可用语言。 */
   getAvailableLanguages(): readonly LanguageKey<TResourcesMap>[];
+
   /** 读取回退语言链。 */
   getFallbackLanguages(): readonly LanguageKey<TResourcesMap>[];
+
   /**
    * 设置回退语言链。
-   *
-   * @param langs - 单个或多个语言，非法项会被过滤。
    */
   setFallbackLanguages(
     langs: LanguageKey<TResourcesMap> | readonly LanguageKey<TResourcesMap>[],
   ): void;
+
   /**
    * 注册语言变更监听器。
-   *
-   * @param fn - 在语言变化时触发的回调。
-   * @returns 取消订阅函数。
    */
   onLanguageChange(fn: (lang: LanguageKey<TResourcesMap>) => void): () => void;
+
+  /**
+   * 清空翻译缓存。
+   */
+  clearCache(): void;
+
+  /**
+   * 获取缓存统计信息。
+   */
+  getCacheStats(): { size: number; enabled: boolean };
 }
 
 /**
- * 创建一个轻量级的 i18n 实例。
- *
- * @param options - 初始化参数，包括默认语言、资源、分隔符等。
- * @returns I18n 实例，提供翻译与监听能力。
+ * 创建一个轻量级的 i18n 实例（完全类型安全，无 any）。
  */
 export function createI18n<const TResourcesMap extends ResourceMap>({
   lang,
@@ -169,121 +272,138 @@ export function createI18n<const TResourcesMap extends ResourceMap>({
   fallbackLanguages,
   separator = DEFAULT_SEPARATOR,
   onMissing,
+  cache = true,
 }: I18nCreateOptions<TResourcesMap>): I18n<TResourcesMap> {
-  const normalizedResources = resources as DeepReadonly<TResourcesMap>;
   type Lang = LanguageKey<TResourcesMap>;
+  type TKey = TranslationKey<TResourcesMap>;
 
-  if (!(lang in normalizedResources)) {
+  if (!(lang in resources)) {
     throw new Error(`Language "${lang}" is not provided in resources`);
   }
 
-  const availableLanguages = Object.freeze(
-    Object.keys(normalizedResources) as Lang[],
-  ) as readonly Lang[];
+  const availableLanguages = Object.freeze(Object.keys(resources) as Lang[]) as readonly Lang[];
 
-  let fallbackChain = sanitizeFallbacks(fallbackLanguages as Lang | Lang[] | undefined, [
+  const flatResources = flattenResources(resources, separator, DEFAULT_SEPARATOR);
+
+  let fallbackChain = sanitizeFallbacks(fallbackLanguages as Lang | readonly Lang[] | undefined, [
     ...availableLanguages,
   ]);
 
   const listeners = new Set<(lang: Lang) => void>();
   let currentLanguage = lang as Lang;
 
-  /** 根据自定义分隔符拆分键，若无法拆出多段则回退到默认分隔符。 */
-  const splitKey = (key: string): string[] => {
-    const primarySegments = key.split(separator).filter(Boolean);
-    if (primarySegments.length > 1 || separator === DEFAULT_SEPARATOR) {
-      return primarySegments;
-    }
-    if (key.includes(DEFAULT_SEPARATOR)) {
-      return key.split(DEFAULT_SEPARATOR).filter(Boolean);
-    }
-    return primarySegments;
-  };
+  const translationCache = new Map<string, string>();
+  const cacheEnabled = cache;
 
-  /** 确认语言是否存在，避免传入非法语言。 */
   const ensureLanguageExists = (language: Lang): Lang => {
-    if (!(language in normalizedResources)) {
+    if (!(language in flatResources)) {
       throw new Error(`Language "${language}" is not provided in resources`);
     }
     return language;
   };
 
-  /** 在指定语言中查找翻译。 */
   const translateFromLanguage = (language: Lang, key: string): string | undefined => {
-    const resource = normalizedResources[language];
+    const resource = flatResources[language];
     if (!resource) {
       return undefined;
     }
-    const segments = splitKey(key);
-    return segments.length === 0 ? undefined : resolveSegments(resource, segments);
+    return resource[key];
   };
 
-  /** 按顺序依次尝试多种语言，直到找到翻译或全部失败。 */
-  const translate = (key: string, order: Lang[]): string | undefined => {
+  const translate = (key: string, order: readonly Lang[]): string | undefined => {
+    if (cacheEnabled) {
+      const cacheKey = `${order[0]}:${key}`;
+      const cached = translationCache.get(cacheKey);
+      if (cached !== undefined) {
+        return cached;
+      }
+    }
+
     for (const language of order) {
       const value = translateFromLanguage(language, key);
       if (value !== undefined) {
+        if (cacheEnabled) {
+          const cacheKey = `${order[0]}:${key}`;
+          translationCache.set(cacheKey, value);
+        }
         return value;
       }
     }
+
     return undefined;
   };
 
-  /** 派发语言变更事件。 */
   const emitLanguageChange = (nextLanguage: Lang): void => {
     listeners.forEach((fn) => {
       fn(nextLanguage);
     });
   };
 
+  // 🎯 完全类型安全的实现（无 any）
+  const $t = ((key: TKey, defaultValue?: string): string => {
+    const fallbackText = defaultValue ?? fallback ?? DEFAULT_FALLBACK_TEXT;
+    const searchOrder = buildSearchOrder(currentLanguage, fallbackChain);
+    const result = translate(key, searchOrder);
+
+    if (result !== undefined) {
+      return result;
+    }
+
+    onMissing?.({
+      key,
+      languagesTried: searchOrder,
+    });
+    return fallbackText;
+  }) as unknown as I18n<TResourcesMap>["$t"];
+
   return {
-    $t(key, defaultValue) {
-      const fallbackText = defaultValue ?? fallback ?? DEFAULT_FALLBACK_TEXT;
-      const searchOrder = buildSearchOrder(currentLanguage, fallbackChain);
-      const result = translate(key, searchOrder);
-
-      if (result !== undefined) {
-        return result;
-      }
-
-      onMissing?.({
-        key,
-        languagesTried: searchOrder,
-      });
-      return fallbackText;
-    },
-    has(key, lang?: Lang) {
+    $t,
+    has(key: TKey, lang?: Lang): boolean {
       const searchOrder = lang
         ? [ensureLanguageExists(lang)]
         : buildSearchOrder(currentLanguage, fallbackChain);
       return translate(key, searchOrder) !== undefined;
     },
-    getCurrentLanguage() {
+    getCurrentLanguage(): Lang {
       return currentLanguage;
     },
-    setCurrentLanguage(language) {
+    setCurrentLanguage(language: Lang): void {
       const nextLanguage = ensureLanguageExists(language);
       if (nextLanguage === currentLanguage) {
         return;
       }
       currentLanguage = nextLanguage;
+
+      if (cacheEnabled) {
+        translationCache.clear();
+      }
+
       emitLanguageChange(nextLanguage);
     },
-    getAvailableLanguages() {
+    getAvailableLanguages(): readonly Lang[] {
       return availableLanguages;
     },
-    getFallbackLanguages() {
+    getFallbackLanguages(): readonly Lang[] {
       return [...fallbackChain];
     },
-    setFallbackLanguages(langs) {
+    setFallbackLanguages(langs: Lang | readonly Lang[]): void {
       fallbackChain = sanitizeFallbacks(langs as Lang | readonly Lang[] | undefined, [
         ...availableLanguages,
       ]);
     },
-    onLanguageChange(fn) {
+    onLanguageChange(fn: (lang: Lang) => void): () => void {
       listeners.add(fn);
-      return () => {
+      return (): void => {
         listeners.delete(fn);
+      };
+    },
+    clearCache(): void {
+      translationCache.clear();
+    },
+    getCacheStats(): { size: number; enabled: boolean } {
+      return {
+        size: translationCache.size,
+        enabled: cacheEnabled,
       };
     },
   };

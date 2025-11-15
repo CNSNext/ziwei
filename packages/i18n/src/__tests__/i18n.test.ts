@@ -76,6 +76,108 @@ describe("createI18n()", () => {
     expect(i18n.$t("greeting.welcome")).toBe("欢迎");
   });
 
+  test("扁平资源在自定义分隔符下同样兼容默认分隔符", () => {
+    type FlatResources = Record<"zh-CN" | "zh-Hant", Record<string, string>>;
+    const protoEntries: Record<string, string> = {
+      "proto/message": "跳过",
+    };
+    const cn = Object.create(protoEntries) as Record<string, string>;
+    cn["scoped/message"] = "作用域消息";
+    const hant = Object.create(protoEntries) as Record<string, string>;
+    hant["scoped/message"] = "作用域訊息";
+    const flatResources: FlatResources = Object.create(null);
+    flatResources["zh-CN"] = cn;
+    flatResources["zh-Hant"] = hant;
+    const i18n = createI18n({ lang: "zh-CN", resources: flatResources, separator: "/" });
+    expect(i18n.$t("scoped/message")).toBe("作用域消息");
+    expect(i18n.$t("scoped.message")).toBe("作用域消息");
+  });
+
+  test("语言资源会忽略继承属性", () => {
+    const protoResource = {
+      inherited: {
+        skip: "proto",
+      },
+    };
+    const derivedResource = Object.create(protoResource);
+    Object.assign(derivedResource, resources["zh-CN"]);
+    const protoMap = {
+      prototypeLang: derivedResource,
+    };
+    const resourcesWithProto = Object.create(protoMap);
+    resourcesWithProto["zh-CN"] = derivedResource;
+    resourcesWithProto["zh-Hant"] = resources["zh-Hant"];
+
+    const i18n = createI18n({
+      lang: "zh-CN",
+      resources: resourcesWithProto as typeof resources,
+    });
+    expect(i18n.$t("greeting.welcome")).toBe("欢迎");
+  });
+
+  test("非字符串值会被忽略", () => {
+    const weirdResources = {
+      "zh-CN": {
+        numeric: 123,
+      },
+      "zh-Hant": {
+        numeric: 456,
+      },
+    } as const;
+    const i18n = createI18n({
+      lang: "zh-CN",
+      resources: weirdResources as unknown as typeof resources,
+    });
+    // @ts-expect-error: 非字符串值被跳过
+    expect(i18n.$t("numeric")).toBe("Missing translation");
+  });
+
+  test("已有 legacy key 时不会重复写入（嵌套资源）", () => {
+    const customResources = {
+      "zh-CN": {
+        "scoped.message": "优先 flat",
+        "scoped/message": "slash 直接键",
+        nested: {
+          value: "still nested",
+        },
+      },
+      "zh-Hant": {
+        "scoped.message": "flat 繁体",
+        "scoped/message": "slash 繁体",
+        nested: {
+          value: "nested 繁体",
+        },
+      },
+    } as const;
+    const i18n = createI18n({
+      lang: "zh-CN",
+      resources: customResources,
+      separator: "/",
+    });
+    expect(i18n.$t("scoped.message")).toBe("优先 flat");
+    expect(i18n.$t("scoped/message")).toBe("slash 直接键");
+  });
+
+  test("已有 legacy key 时不会重复写入（扁平资源）", () => {
+    const customResources = {
+      "zh-CN": {
+        "scoped.message": "flat 记录",
+        "scoped/message": "slash 记录",
+      },
+      "zh-Hant": {
+        "scoped.message": "flat 繁体",
+        "scoped/message": "slash 繁体",
+      },
+    } as const;
+    const i18n = createI18n({
+      lang: "zh-CN",
+      resources: customResources,
+      separator: "/",
+    });
+    expect(i18n.$t("scoped.message")).toBe("flat 记录");
+    expect(i18n.$t("scoped/message")).toBe("slash 记录");
+  });
+
   test("默认 fallback 与 option fallback 生效", () => {
     const i18nDefault = createI18n({ lang: "zh-CN", resources });
     // @ts-expect-error: 故意访问不存在的 key
@@ -195,6 +297,25 @@ describe("createI18n()", () => {
     // @ts-expect-error: 包含不受支持的语言
     i18n.setFallbackLanguages(["zh-Hant", "zh-Hant", "en-US"]);
     expect(i18n.getFallbackLanguages()).toEqual(["zh-Hant"]);
+  });
+
+  test("clearCache 与 getCacheStats", () => {
+    const i18n = createI18n({ lang: "zh-CN", resources });
+    expect(i18n.getCacheStats()).toEqual({ size: 0, enabled: true });
+    i18n.$t("greeting.welcome");
+    expect(i18n.getCacheStats()).toEqual({ size: 1, enabled: true });
+    i18n.clearCache();
+    expect(i18n.getCacheStats()).toEqual({ size: 0, enabled: true });
+  });
+
+  test("禁用缓存时不会命中缓存逻辑", () => {
+    const i18n = createI18n({ lang: "zh-CN", resources, cache: false });
+    expect(i18n.getCacheStats()).toEqual({ size: 0, enabled: false });
+    i18n.$t("greeting.welcome");
+    i18n.$t("greeting.welcome");
+    expect(i18n.getCacheStats()).toEqual({ size: 0, enabled: false });
+    i18n.setCurrentLanguage("zh-Hant");
+    expect(i18n.getCacheStats()).toEqual({ size: 0, enabled: false });
   });
 
   test("fallback 链可被清空并恢复", () => {

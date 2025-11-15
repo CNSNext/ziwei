@@ -13,7 +13,7 @@
 ## 文档
 
 - [贡献指南 AGENTS.md](./AGENTS.md)
-- [核心算法说明](./docs/CORE_ALGORITHMS.md)
+- [@ziweijs/core 架构说明](./docs/core-architecture.md)
 
 ## 版权
 

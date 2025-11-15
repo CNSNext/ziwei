@@ -1,11 +1,6 @@
 pre-commit:
   parallel: true
   jobs:
-    - name: format
-      glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
-      run: pnpm biome format --write --no-errors-on-unmatched {staged_files}
-      stage_fixed: true
-
     - name: format package.json
       glob: "package.json"
       run: pnpm sort-package-json
@@ -13,7 +8,8 @@ pre-commit:
 
     - name: lint
       glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
-      run: pnpm biome check --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+      run: pnpm biome check --write --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {staged_files}
+      stage_fixed: true
 
     - name: type check
       run: pnpm tsgo --noEmit

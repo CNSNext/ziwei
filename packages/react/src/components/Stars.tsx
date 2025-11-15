@@ -1,4 +1,4 @@
-import { _minorStars, type Palace, type StarKey, type Star as StarModel } from "@ziweijs/core";
+import { MINOR_STARS, type Palace, type StarKey, type Star as StarModel } from "@ziweijs/core";
 import { use, useCallback, useMemo } from "react";
 import { ConfigContext } from "../context/config";
 import Star from "./Star";
@@ -15,10 +15,10 @@ export default function Stars({ data, x, y, palace }: StarsProps) {
 
   const starColor = useCallback(
     (starKey: StarKey) => {
-      if (starKey === "ZI_WEI") {
+      if (starKey === "ZiWei") {
         return ziweiColor;
       }
-      if (_minorStars.includes(starKey)) {
+      if (MINOR_STARS.includes(starKey)) {
         return minorStarColor;
       }
       return fontColor;
@@ -26,7 +26,7 @@ export default function Stars({ data, x, y, palace }: StarsProps) {
     [ziweiColor, fontColor, minorStarColor],
   );
 
-  const onlyCfData = useMemo(() => data.filter((item) => item.ST?.CF), [data]);
+  const onlyCfData = useMemo(() => data.filter((item) => item.ST?.exit), [data]);
 
   return (
     <g>

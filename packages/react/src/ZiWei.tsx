@@ -1,4 +1,4 @@
-import type { GenderKey, Language } from "@ziweijs/core";
+import type { GenderKey, Locale } from "@ziweijs/core";
 import { useCallback, useMemo } from "react";
 import DestinyBoard from "./components/DestinyBoard";
 import { ConfigContext, type ConfigContextProps } from "./context/config";
@@ -11,7 +11,7 @@ export interface ZiWeiProps {
   name: string;
   date: string;
   gender: GenderKey;
-  language?: Language;
+  language?: Locale;
 }
 
 export default function ZiWei({

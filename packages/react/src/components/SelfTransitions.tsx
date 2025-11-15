@@ -1,9 +1,8 @@
-import type { SelfTransformation, StarProps } from "@ziweijs/core";
+import type { StarProps } from "@ziweijs/core";
 
 export interface SelfTransitionsProps {
   x: number;
   y: number;
-  type: SelfTransformation;
   ST: StarProps["ST"];
 }
 

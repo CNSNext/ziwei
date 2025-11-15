@@ -78,11 +78,11 @@ export default function Star({ index, x, y, name, fill, palace, starKey, YT, ST 
           fill={selfTransformationStroke}
           fontWeight={900}
         >
-          {YT?.key}
+          {YT.key}
         </text>
       )}
       {/*离心自化*/}
-      {ST?.CF && left.includes(palace.index) && (
+      {ST?.exit && left.includes(palace.index) && (
         <g>
           <ArrowLine
             points={[
@@ -104,11 +104,11 @@ export default function Star({ index, x, y, name, fill, palace, starKey, YT, ST 
             fill={selfTransformationStroke}
             textAnchor="middle"
           >
-            {ST?.CF.key}
+            {ST.exit.key}
           </text>
         </g>
       )}
-      {ST?.CF && right.includes(palace.index) && (
+      {ST?.exit && right.includes(palace.index) && (
         <g>
           <ArrowLine
             points={[
@@ -132,11 +132,11 @@ export default function Star({ index, x, y, name, fill, palace, starKey, YT, ST 
             textAnchor="middle"
             fill={selfTransformationStroke}
           >
-            {ST?.CF.key}
+            {ST.exit.key}
           </text>
         </g>
       )}
-      {ST?.CF && top.includes(palace.index) && (
+      {ST?.exit && top.includes(palace.index) && (
         <g>
           <ArrowLine
             points={[
@@ -154,11 +154,11 @@ export default function Star({ index, x, y, name, fill, palace, starKey, YT, ST 
             textAnchor="middle"
             fill={selfTransformationStroke}
           >
-            {ST?.CF.key}
+            {ST.exit.key}
           </text>
         </g>
       )}
-      {ST?.CF && bottom.includes(palace.index) && (
+      {ST?.exit && bottom.includes(palace.index) && (
         <g>
           <ArrowLine
             points={[
@@ -179,7 +179,7 @@ export default function Star({ index, x, y, name, fill, palace, starKey, YT, ST 
             textAnchor="middle"
             fill={selfTransformationStroke}
           >
-            {ST?.CF.key}
+            {ST.exit.key}
           </text>
         </g>
       )}

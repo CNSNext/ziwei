@@ -9,12 +9,18 @@ catalogs:
     '@biomejs/biome':
       specifier: 2.3.5
       version: 2.3.5
+    '@changesets/changelog-github':
+      specifier: 0.5.1
+      version: 0.5.1
     '@changesets/cli':
       specifier: 2.29.7
       version: 2.29.7
     '@microsoft/api-extractor':
       specifier: 7.55.0
       version: 7.55.0
+    '@moonrepo/cli':
+      specifier: 1.41.7
+      version: 1.41.7
     '@rsbuild/core':
       specifier: 1.6.6
       version: 1.6.6
@@ -40,6 +46,9 @@ catalogs:
       specifier: 4.0.9
       version: 4.0.9
     '@vitest/coverage-v8':
+      specifier: 4.0.9
+      version: 4.0.9
+    '@vitest/ui':
       specifier: 4.0.9
       version: 4.0.9
     ahooks:
@@ -75,7 +84,7 @@ importers:
         specifier: 'catalog:'
         version: 2.3.5
       '@changesets/changelog-github':
-        specifier: 0.5.1
+        specifier: 'catalog:'
         version: 0.5.1
       '@changesets/cli':
         specifier: 'catalog:'
@@ -84,7 +93,7 @@ importers:
         specifier: 'catalog:'
         version: 7.55.0(@types/node@24.6.1)
       '@moonrepo/cli':
-        specifier: 1.41.7
+        specifier: 'catalog:'
         version: 1.41.7
       '@rslib/core':
         specifier: 'catalog:'
@@ -102,7 +111,7 @@ importers:
         specifier: 'catalog:'
         version: 4.0.9(@vitest/browser@4.0.9(vite@7.1.12(@types/node@24.6.1)(jiti@2.6.1))(vitest@4.0.9))(vitest@4.0.9)
       '@vitest/ui':
-        specifier: 4.0.9
+        specifier: 'catalog:'
         version: 4.0.9(vitest@4.0.9)
       is-ci:
         specifier: 'catalog:'

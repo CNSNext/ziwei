@@ -8,3 +8,4 @@ export * from "./utils/function/memoize";
 export * from "./utils/function/pipe";
 export * from "./utils/math";
 export * from "./utils/object";
+export * from "./utils/sexagenary";

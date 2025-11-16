@@ -15,6 +15,7 @@ import {
   getLunisolarDateText,
   getSolarDateText,
 } from "../utils/date";
+import { normalizeDateByTimezone } from "../utils/timezone";
 
 export function calculateNatalBySolar(
   runtime: ZiWeiRuntime,
@@ -25,9 +26,10 @@ export function calculateNatalBySolar(
   language && runtime.i18n.setCurrentLanguage(language);
 
   const globalConfigs = runtime.configs;
-  let currentSolarDate: Date = date;
+  const normalizedDate = normalizeDateByTimezone(date, timezone);
+  let currentSolarDate: Date = normalizedDate;
 
-  const trueSolarTime = calculateTrueSolarTime(date, longitude ?? 116.38333, timezone);
+  const trueSolarTime = calculateTrueSolarTime(normalizedDate, longitude ?? 116.38333, timezone);
 
   if (useTrueSolarTime) {
     currentSolarDate = trueSolarTime;
@@ -50,7 +52,7 @@ export function calculateNatalBySolar(
       birthYear: lunarHour.getYear(),
       birthYearStemKey: stemKey,
       birthYearBranchKey: branchKey,
-      solarDate: getSolarDateText(date),
+      solarDate: getSolarDateText(normalizedDate),
       solarDateByTrue: useTrueSolarTime ? getSolarDateText(currentSolarDate) : undefined,
       lunisolarDate: getLunisolarDateText(lunarHour, hourIndex, runtime.i18n),
       sexagenaryCycleDate: lunarHour.getEightChar().toString(),

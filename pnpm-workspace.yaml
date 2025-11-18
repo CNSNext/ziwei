@@ -17,7 +17,7 @@ catalog:
   "@vitest/browser-playwright": 4.0.10
   "@vitest/coverage-v8": 4.0.10
   "@vitest/ui": 4.0.10
-  "@types/react": 19.2.5
+  "@types/react": 19.2.6
   "@types/react-dom": 19.2.3
   "@changesets/cli": 2.29.7
   "@changesets/changelog-github": 0.5.1

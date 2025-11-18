@@ -1,11 +1,7 @@
 import { LunarHour } from "tyme4ts";
 import type { ZiWeiRuntime } from "../context";
 import { calculateNatal } from "../services/natal";
-import type {
-  CreateZiWeiLunisolarParams,
-  CreateZiWeiSolarParams,
-  NatalCalculateOptions,
-} from "../typings";
+import type { CreateZiWeiLunisolarParams, CreateZiWeiSolarParams } from "../typings";
 import {
   calculateHourByIndex,
   calculateLunisolarDateBySolar,
@@ -17,78 +13,82 @@ import {
 } from "../utils/date";
 import { normalizeDateByTimezone } from "../utils/timezone";
 
-export function calculateNatalBySolar(
-  runtime: ZiWeiRuntime,
-  params: CreateZiWeiSolarParams,
-  options: NatalCalculateOptions = {},
-) {
-  const { name, gender, date, language, longitude, useTrueSolarTime = true, timezone = 8 } = params;
-  language && runtime.i18n.setCurrentLanguage(language);
-
-  const globalConfigs = runtime.configs;
-  const normalizedDate = normalizeDateByTimezone(date, timezone);
-  let currentSolarDate: Date = normalizedDate;
-
-  const trueSolarTime = calculateTrueSolarTime(normalizedDate, longitude ?? 116.38333, timezone);
-
-  if (useTrueSolarTime) {
-    currentSolarDate = trueSolarTime;
-  }
-
-  const lunarHour = calculateLunisolarDateBySolar(currentSolarDate);
-  const { stemKey, branchKey, monthIndex, day, hourIndex } = calculateNatalDateBySolar({
-    date: lunarHour,
-    globalConfigs,
-  });
-
-  return calculateNatal(
-    runtime,
-    {
+export const calculateNatalBySolar =
+  (params: CreateZiWeiSolarParams) => (runtime: ZiWeiRuntime) => {
+    const {
       name,
       gender,
-      monthIndex,
-      day,
-      hourIndex,
-      birthYear: lunarHour.getYear(),
-      birthYearStemKey: stemKey,
-      birthYearBranchKey: branchKey,
-      solarDate: getSolarDateText(normalizedDate),
-      solarDateByTrue: useTrueSolarTime ? getSolarDateText(currentSolarDate) : undefined,
-      lunisolarDate: getLunisolarDateText(lunarHour, hourIndex, runtime.i18n),
-      sexagenaryCycleDate: lunarHour.getEightChar().toString(),
-    },
-    options,
-  );
-}
+      date,
+      language,
+      longitude,
+      useTrueSolarTime = true,
+      timezone = 8,
+      referenceDate,
+    } = params;
+    language && runtime.i18n.setCurrentLanguage(language);
 
-export function calculateNatalByLunisolar(
-  runtime: ZiWeiRuntime,
-  { name, gender, date, language }: CreateZiWeiLunisolarParams,
-  options: NatalCalculateOptions = {},
-) {
-  language && runtime.i18n.setCurrentLanguage(language);
-  const [year, month, days, currentHourIndex] = date.split("-").map(Number);
-  const [hour, minute, second] = calculateHourByIndex(currentHourIndex);
-  const lunarHour = LunarHour.fromYmdHms(year, month, days, hour, minute, second);
-  const solarTime = lunarHour.getSolarTime();
-  const { stemKey, branchKey, monthIndex, day, hourIndex } = calculateZiWeiDate(date);
+    const globalConfigs = runtime.configs;
+    const normalizedDate = normalizeDateByTimezone(date, timezone);
+    let currentSolarDate: Date = normalizedDate;
 
-  return calculateNatal(
-    runtime,
-    {
-      name,
-      gender,
-      monthIndex,
-      day,
-      hourIndex,
-      birthYear: lunarHour.getYear(),
-      birthYearStemKey: stemKey,
-      birthYearBranchKey: branchKey,
-      solarDate: getSolarDateText(solarTime),
-      solarDateByTrue: undefined,
-      lunisolarDate: getLunisolarDateText(lunarHour, hourIndex, runtime.i18n),
-      sexagenaryCycleDate: lunarHour.getEightChar().toString(),
-    },
-    options,
-  );
-}
+    const trueSolarTime = calculateTrueSolarTime(normalizedDate, longitude ?? 116.38333, timezone);
+
+    if (useTrueSolarTime) {
+      currentSolarDate = trueSolarTime;
+    }
+
+    const lunarHour = calculateLunisolarDateBySolar(currentSolarDate);
+    const { stemKey, branchKey, monthIndex, day, hourIndex } = calculateNatalDateBySolar({
+      date: lunarHour,
+      globalConfigs,
+    });
+
+    return calculateNatal(
+      runtime,
+      {
+        name,
+        gender,
+        monthIndex,
+        day,
+        hourIndex,
+        birthYear: lunarHour.getYear(),
+        birthYearStemKey: stemKey,
+        birthYearBranchKey: branchKey,
+        solarDate: getSolarDateText(normalizedDate),
+        solarDateByTrue: useTrueSolarTime ? getSolarDateText(currentSolarDate) : undefined,
+        lunisolarDate: getLunisolarDateText(lunarHour, hourIndex, runtime.i18n),
+        sexagenaryCycleDate: lunarHour.getEightChar().toString(),
+      },
+      referenceDate,
+    );
+  };
+
+export const calculateNatalByLunisolar =
+  ({ name, gender, date, language, referenceDate }: CreateZiWeiLunisolarParams) =>
+  (runtime: ZiWeiRuntime) => {
+    language && runtime.i18n.setCurrentLanguage(language);
+    const [year, month, days, currentHourIndex] = date.split("-").map(Number);
+    const [hour, minute, second] = calculateHourByIndex(currentHourIndex);
+    const lunarHour = LunarHour.fromYmdHms(year, month, days, hour, minute, second);
+    const solarTime = lunarHour.getSolarTime();
+    const { stemKey, branchKey, monthIndex, day, hourIndex } = calculateZiWeiDate(date);
+
+    return calculateNatal(
+      runtime,
+      {
+        name,
+        gender,
+        monthIndex,
+        day,
+        hourIndex,
+        birthYear: lunarHour.getYear(),
+        birthYearStemKey: stemKey,
+        birthYearBranchKey: branchKey,
+        solarDate: getSolarDateText(solarTime),
+        solarDateByTrue: undefined,
+        lunisolarDate: getLunisolarDateText(lunarHour, hourIndex, runtime.i18n),
+        sexagenaryCycleDate: lunarHour.getEightChar().toString(),
+      },
+      referenceDate,
+    );
+  };

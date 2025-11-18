@@ -13,22 +13,22 @@ describe("pipelines/natal bridges", () => {
     const runtime = createZiWeiRuntime();
     const natalSpy = vi.spyOn(natalService, "calculateNatal").mockReturnValue({} as any);
 
-    const result = calculateNatalByLunisolar(runtime, {
+    const result = calculateNatalByLunisolar({
       name: "测试",
       gender: "Yang",
       date: "1999-1-5-3",
       language: "zh-Hant",
-    });
+    })(runtime);
 
     expect(result).toBe(natalSpy.mock.results[0].value);
-    const [ctx, payload, options] = natalSpy.mock.calls[0];
+    const [ctx, payload, referenceDate] = natalSpy.mock.calls[0];
     expect(ctx).toBe(runtime);
     expect(payload).toMatchObject({
       name: "测试",
       gender: "Yang",
       solarDateByTrue: undefined,
     });
-    expect(options).toEqual({});
+    expect(referenceDate).toBeUndefined();
     expect(runtime.i18n.getCurrentLanguage()).toBe("zh-Hant");
   });
 });

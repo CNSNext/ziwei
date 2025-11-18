@@ -36,8 +36,8 @@ describe("pipelines/natal", () => {
 
     const params = createSolarParams({ useTrueSolarTime: false });
 
-    const natalWithOverride = calculateNatalBySolar(runtime, params, { referenceDate });
-    const natalWithRuntimeNow = calculateNatalBySolar(runtimeReference, params);
+    const natalWithOverride = calculateNatalBySolar({ ...params, referenceDate })(runtime);
+    const natalWithRuntimeNow = calculateNatalBySolar(params)(runtimeReference);
 
     expect(natalWithOverride.decade).toEqual(natalWithRuntimeNow.decade);
   });
@@ -48,19 +48,17 @@ describe("pipelines/natal", () => {
     });
 
     const natalWithTrueSolar = calculateNatalBySolar(
-      runtime,
       createSolarParams({
         longitude: 121.4737,
         useTrueSolarTime: true,
       }),
-    );
+    )(runtime);
     const natalWithoutTrueSolar = calculateNatalBySolar(
-      runtime,
       createSolarParams({
         longitude: 121.4737,
         useTrueSolarTime: false,
       }),
-    );
+    )(runtime);
 
     expect(natalWithTrueSolar.solarDateByTrue).toBeDefined();
     expect(natalWithoutTrueSolar.solarDateByTrue).toBeUndefined();
@@ -74,9 +72,9 @@ describe("pipelines/natal", () => {
     const hansParams = createSolarParams({ language: "zh-Hans", useTrueSolarTime: false });
     const hantParams = createSolarParams({ language: "zh-Hant", useTrueSolarTime: false });
 
-    const hansNatal = calculateNatalBySolar(runtime, hansParams);
-    const hantNatal = calculateNatalBySolar(runtime, hantParams);
-    const hansAgain = calculateNatalBySolar(runtime, hansParams);
+    const hansNatal = calculateNatalBySolar(hansParams)(runtime);
+    const hantNatal = calculateNatalBySolar(hantParams)(runtime);
+    const hansAgain = calculateNatalBySolar(hansParams)(runtime);
 
     expect(hansNatal.hour.endsWith("时")).toBe(true);
     expect(hantNatal.hour.endsWith("時")).toBe(true);
@@ -94,7 +92,7 @@ describe("pipelines/natal", () => {
     const trueSolarTime = new Date("1993-08-08T07:45:00+08:00");
     const spy = vi.spyOn(dateUtils, "calculateTrueSolarTime").mockReturnValue(trueSolarTime);
 
-    const natal = calculateNatalBySolar(runtime, params);
+    const natal = calculateNatalBySolar(params)(runtime);
     const expectedText = dateUtils.getSolarDateText(trueSolarTime);
 
     expect(spy).toHaveBeenCalledWith(baseSolarDate, 116.38333, 8);
@@ -111,7 +109,7 @@ describe("pipelines/natal", () => {
     const trueSolarTime = new Date("1993-08-08T07:40:00+08:00");
     const spy = vi.spyOn(dateUtils, "calculateTrueSolarTime").mockReturnValue(trueSolarTime);
 
-    const natal = calculateNatalBySolar(runtime, params);
+    const natal = calculateNatalBySolar(params)(runtime);
     const expectedText = dateUtils.getSolarDateText(trueSolarTime);
 
     expect(spy).toHaveBeenCalledWith(baseSolarDate, 116.38333, 8);

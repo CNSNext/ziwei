@@ -25,6 +25,10 @@ import type {
 
 // ================== Basic ==================
 
+export type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};
+
 export type Locale = "zh-Hans" | "zh-Hant";
 
 // ================== Values Object ==================
@@ -288,6 +292,8 @@ export interface CreateZiWeiSolarParams {
   timezone?: number;
   /** 是否采用真太阳时计算 默认为 true */
   useTrueSolarTime?: boolean;
+  /** 覆盖用于推断大限等的参考时间；默认取 runtime.now() */
+  referenceDate?: Date;
 }
 
 export interface CreateZiWeiLunisolarParams {
@@ -299,9 +305,6 @@ export interface CreateZiWeiLunisolarParams {
   date: string;
   /** 语言 */
   language?: Locale;
-}
-
-export interface NatalCalculateOptions {
   /** 覆盖用于推断大限等的参考时间；默认取 runtime.now() */
   referenceDate?: Date;
 }

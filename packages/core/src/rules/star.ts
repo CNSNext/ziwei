@@ -1,8 +1,7 @@
 import { BRANCH_KEYS, STEM_TRANSFORMATIONS, TRANSFORMATION_KEYS } from "../constants";
 import type { FiveElementSchemeValue, StarKey, StarMetaVO, StemKey } from "../typings";
-import { memoize } from "../utils/function/memoize";
 import { relativeIndex, wrapIndex } from "../utils/math";
-import { freeze } from "../utils/object";
+import { memoize } from "../utils/memoize";
 
 /**
  * 取五行局数，以日数取其余数以求紫微之位
@@ -87,37 +86,58 @@ export function getMinorStarIndices(monthIndex: number, hourIndex: number): Mino
 export function createMajorStarsMeta(
   ziweiIndex: number,
   tianfuIndex: number,
-): Readonly<StarMetaVO[]> {
-  return freeze([
+  onlyTransformation: boolean = false,
+): StarMetaVO[] {
+  function createMetaZiWeiStar({ key, galaxy }: Omit<StarMetaVO, "startIndex" | "direction">) {
+    return { key, startIndex: ziweiIndex, direction: -1, galaxy } as const;
+  }
+
+  function createMetaTianFuStar({ key, galaxy }: Omit<StarMetaVO, "startIndex" | "direction">) {
+    return { key, startIndex: tianfuIndex, direction: 1, galaxy } as const;
+  }
+
+  return [
     // 紫微星系（逆时针）
-    { key: "ZiWei", startIndex: ziweiIndex, direction: -1, galaxy: "C" },
-    { key: "TianJi", startIndex: ziweiIndex, direction: -1, galaxy: "N" },
-    { key: undefined, startIndex: ziweiIndex, direction: -1, galaxy: undefined },
-    { key: "TaiYang", startIndex: ziweiIndex, direction: -1, galaxy: "N" },
-    { key: "WuQu", startIndex: ziweiIndex, direction: -1, galaxy: "N" },
-    { key: "TianTong", startIndex: ziweiIndex, direction: -1, galaxy: "N" },
-    { key: undefined, startIndex: ziweiIndex, direction: -1, galaxy: undefined },
-    { key: undefined, startIndex: ziweiIndex, direction: -1, galaxy: undefined },
-    { key: "LianZhen", startIndex: ziweiIndex, direction: -1, galaxy: "N" },
+    createMetaZiWeiStar({ key: "ZiWei", galaxy: "C" }),
+    createMetaZiWeiStar({ key: "TianJi", galaxy: "N" }),
+    createMetaStar({ startIndex: ziweiIndex, direction: -1 }),
+    createMetaZiWeiStar({ key: "TaiYang", galaxy: "N" }),
+    createMetaZiWeiStar({ key: "WuQu", galaxy: "N" }),
+    createMetaZiWeiStar({ key: "TianTong", galaxy: "N" }),
+    createMetaStar({ startIndex: ziweiIndex, direction: -1 }),
+    createMetaStar({ startIndex: ziweiIndex, direction: -1 }),
+    createMetaZiWeiStar({ key: "LianZhen", galaxy: "N" }),
 
     // 天府星系（顺时针）
-    { key: "TianFu", startIndex: tianfuIndex, direction: 1, galaxy: undefined },
-    { key: "TaiYin", startIndex: tianfuIndex, direction: 1, galaxy: "S" },
-    { key: "TanLang", startIndex: tianfuIndex, direction: 1, galaxy: "S" },
-    { key: "JuMen", startIndex: tianfuIndex, direction: 1, galaxy: "S" },
-    {
-      key: "TianXiang",
-      startIndex: tianfuIndex,
-      direction: 1,
-      galaxy: undefined,
-    },
-    { key: "TianLiang", startIndex: tianfuIndex, direction: 1, galaxy: "S" },
-    { key: "QiSha", startIndex: tianfuIndex, direction: 1, galaxy: undefined },
-    { key: undefined, startIndex: tianfuIndex, direction: 1, galaxy: undefined },
-    { key: undefined, startIndex: tianfuIndex, direction: 1, galaxy: undefined },
-    { key: undefined, startIndex: tianfuIndex, direction: 1, galaxy: undefined },
-    { key: "PoJun", startIndex: tianfuIndex, direction: 1, galaxy: "S" },
-  ]);
+    onlyTransformation
+      ? createMetaStar({ startIndex: ziweiIndex, direction: -1 })
+      : createMetaStar({ key: "TianFu", startIndex: tianfuIndex, direction: 1 }),
+    createMetaTianFuStar({ key: "TaiYin", galaxy: "S" }),
+    createMetaTianFuStar({ key: "TanLang", galaxy: "S" }),
+    createMetaTianFuStar({ key: "JuMen", galaxy: "S" }),
+    onlyTransformation
+      ? createMetaStar({ startIndex: ziweiIndex, direction: 1 })
+      : createMetaStar({
+          key: "TianXiang",
+          startIndex: tianfuIndex,
+          direction: 1,
+          galaxy: undefined,
+        }),
+
+    createMetaTianFuStar({ key: "TianLiang", galaxy: "S" }),
+    onlyTransformation
+      ? createMetaStar({ startIndex: ziweiIndex, direction: 1 })
+      : createMetaStar({
+          key: "QiSha",
+          startIndex: tianfuIndex,
+          direction: 1,
+          galaxy: undefined,
+        }),
+    createMetaStar({ startIndex: ziweiIndex, direction: 1 }),
+    createMetaStar({ startIndex: ziweiIndex, direction: 1 }),
+    createMetaStar({ startIndex: ziweiIndex, direction: 1 }),
+    createMetaTianFuStar({ key: "PoJun", galaxy: "S" }),
+  ];
 }
 
 export interface MinorStarsMetaCreateParams {
@@ -204,3 +224,7 @@ export function calculateStarTransformation({
 export const memoCalculateStarTransformation = memoize(calculateStarTransformation, {
   getCacheKey: ({ stemKey, starKey }) => stemKey + starKey,
 });
+
+export function createMetaStar({ key, startIndex, direction, galaxy }: StarMetaVO) {
+  return { key, startIndex, direction, galaxy } as const;
+}

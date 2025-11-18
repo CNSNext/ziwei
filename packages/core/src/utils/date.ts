@@ -19,7 +19,7 @@ export function calculateZiWeiDate(date: string) {
 }
 
 export function normalizeHour(date: LunarHour, globalConfigs: GlobalConfigs) {
-  if (globalConfigs._dayDivision === "normal") {
+  if (globalConfigs.division.day === "normal") {
     const isLateZi = date.getHour() === 23;
     if (isLateZi) {
       const nextLunarDay = date.getLunarDay().next(1); // 计算次日
@@ -42,24 +42,24 @@ export function normalizeHour(date: LunarHour, globalConfigs: GlobalConfigs) {
 /**
  * 处理农历闰月的日期修正函数
  *
- * 当遇到农历闰月时，根据全局配置的月份划分规则（_monthDivision），通过调整日期的方式修正
+ * 当遇到农历闰月时，根据全局配置的月份划分规则（division.month），通过调整日期的方式修正
  * 将闰月日期映射到对应的前一个月、后一个月或根据15日前后自动判断的月份，非闰月情况则返回原日期
  *
  * TODO：此计算方法依然存在问题，对于一些特殊日期的计算，需要进一步优化。
  *
  * @param date - 需要处理的农历时间对象，包含日、月、年等农历信息
- * @param globalConfigs - 全局配置对象，其中_monthDivision决定闰月处理规则
+ * @param globalConfigs - 全局配置对象，其中 division.month 决定闰月处理规则
  * @returns 修正后的农历时间对象，若原月份非闰月则返回原对象
  *
  * @remarks
- * 支持的_monthDivision规则：
+ * 支持的 division.month 规则：
  * - "last": 闰月统一映射到前一个月（通过日期减30天实现）
  * - "next": 闰月统一映射到后一个月（通过日期加30天实现）
  * - "normal": 15日（不含23点）前映射到前一个月，15日23点及之后映射到后一个月
  *
  * @example
  * // 闰月且配置为"last"时，日期减30天切换到前一个月
- * const fixedDate = fixLeapMonth(leapMonthDate, { _monthDivision: 'last' });
+ * const fixedDate = fixLeapMonth(leapMonthDate, { division: { month: 'last' } });
  */
 export function fixLeapMonth(date: LunarHour, globalConfigs: GlobalConfigs): LunarHour {
   let targetDay = date.getLunarDay();
@@ -67,19 +67,19 @@ export function fixLeapMonth(date: LunarHour, globalConfigs: GlobalConfigs): Lun
   let targetYear = targetMonth.getLunarYear();
 
   if (targetMonth.isLeap()) {
-    if (globalConfigs._monthDivision === "last") {
+    if (globalConfigs.division.month === "last") {
       // 闰月映射到前一个月：日期减30天
       targetDay = targetDay.next(-30);
       targetMonth = targetDay.getLunarMonth();
       targetYear = targetMonth.getLunarYear();
     }
-    if (globalConfigs._monthDivision === "next") {
+    if (globalConfigs.division.month === "next") {
       // 闰月映射到后一个月：日期加30天
       targetDay = targetDay.next(30);
       targetMonth = targetDay.getLunarMonth();
       targetYear = targetMonth.getLunarYear();
     }
-    if (globalConfigs._monthDivision === "normal") {
+    if (globalConfigs.division.month === "normal") {
       const day = targetDay.getDay();
       if (day < 15 || (day === 15 && date.getHour() !== 23)) {
         // 15日前（含15日非23点）映射到前一个月：日期减30天

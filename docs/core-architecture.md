@@ -19,9 +19,9 @@ packages/core/
 │  ├─ typings/         # 公共类型定义、VO 接口
 │  ├─ utils/
 │  │  ├─ date.ts       # 日历换算、真太阳时、干支推导
-│  │  ├─ function/     # pipe、memoize
 │  │  ├─ math.ts       # wrapIndex 等数学辅助
-│  │  └─ object.ts     # 对象遍历、映射等工具
+│  │  ├─ memoize.ts    # 轻量缓存辅助
+│  │  └─ sexagenary.ts # 干支算法
 │  ├─ sdk.ts           # 默认 runtime 封装的 createZiWeiBy*
 │  ├─ public.ts        # 单一出口，聚合 re-export
 │  └─ index.ts         # re-export public.ts，供 bundler tree-shaking
@@ -32,7 +32,7 @@ packages/core/
 
 - **Constants**：集中维护枚举值、映射表与 meta 信息（星耀分组、十二宫 key、四化配置等），供算法层查表使用。
 - **Infra**：
-  - `infra/configs` 暴露 `GlobalConfigs`，通过 `_yearDivision / _monthDivision / _dayDivision` 三个字段描述年、月、日的分界策略，`getGlobalConfigs()` 始终返回副本。
+  - `infra/configs` 暴露 `GlobalConfigs`，通过 `division.year/month/day` 描述年、月、日的分界策略，`star` 控制布星模式；`getGlobalConfigs()` 始终返回副本。
   - `infra/i18n` 使用 `@ziweijs/i18n` 初始化翻译实例，`createZiWeiI18n` 支持自定义默认语言，`i18n` 供工具函数（如 `getLunisolarDateText`）在无 runtime 时复用。
 - **Context**：`createZiWeiRuntime({ i18n, configs, now })` 创建运行时容器；所有 services/pipelines 通过 runtime 访问依赖（翻译、全局配置、时间），`defaultRuntime` 被 SDK 默认使用。
 - **Rules**：保持纯函数属性，不依赖 runtime，包含公式型逻辑（例如 `calculateFiveElementScheme`、`calculateMainPalaceIndex`、`memoCalculateStarTransformation`）。
@@ -40,7 +40,7 @@ packages/core/
 - **Pipelines**：面向业务输入（公历或农历字符串），封装时间换算与参数校准。`calculateNatalBySolar` 会按需执行真太阳时修正、转换为 `tyme4ts` 的 `LunarHour` 后再进入 `calculateNatal`。
 - **Models**：封装领域实体的附加能力，如 `createNatal` 内部挂载 `getDecade()`、`getDecadeIndex()`，`createPalace` 提供 `flying()` 计算宫位化曜。
 - **Typings**：集中导出 `CreateZiWeiSolarParams`、`NatalCalculateParams`、`Palace`、`Star` 等类型，确保跨层 API 一致性。
-- **Utils**：`utils/date.ts` 处理所有与时间相关的副作用，`utils/function/*` 封装通用工具，`utils/math`、`utils/object` 提供非业务数学/对象操作。
+- **Utils**：`utils/date.ts` 处理所有与时间相关的副作用，`utils/memoize` 封装通用缓存工具，`utils/math`、`utils/sexagenary` 提供非业务数学/干支操作。
 - **SDK & Public API**：`sdk.ts` 暴露 `createZiWeiBySolar` / `createZiWeiByLunisolar` 并 re-export runtime 类型；`public.ts` 是包的最终出口，集中导出常量、工具、类型及 SDK。
 
 ## 运行链路
@@ -66,13 +66,13 @@ packages/core/
 
 ### 坐标与索引体系
 
-| 维度 | 取值范围 | 说明 |
-| ---- | -------- | ---- |
+| 维度                                      | 取值范围                  | 说明                                                   |
+| ----------------------------------------- | ------------------------- | ------------------------------------------------------ |
 | 宫位/地支 (`BRANCH_KEYS` / `PALACE_KEYS`) | 12 个元素，默认从寅宫开始 | 所有宫位算法都在数组上做环形运算，`wrapIndex` 负责取模 |
-| 月份 (`monthIndex`) | `0-11`（农历正月至腊月） | Pipeline 在 `calculateNatalDateBySolar` 中输出 |
-| 时辰 (`hourIndex`) | `0-11`（子时至亥时） | 与月份共同决定命宫索引 |
-| 天干 (`STEM_KEYS`) | 10 个元素（甲乙丙丁…癸） | 推导十二宫干支序列、五行局、化曜 |
-| 五行局 (`FIVE_ELEMENT_SCHEME_VALUES`) | `2/3/4/5/6` | 由命宫干支确定；影响布星与大限方向 |
+| 月份 (`monthIndex`)                       | `0-11`（农历正月至腊月）  | Pipeline 在 `calculateNatalDateBySolar` 中输出         |
+| 时辰 (`hourIndex`)                        | `0-11`（子时至亥时）      | 与月份共同决定命宫索引                                 |
+| 天干 (`STEM_KEYS`)                        | 10 个元素（甲乙丙丁…癸）  | 推导十二宫干支序列、五行局、化曜                       |
+| 五行局 (`FIVE_ELEMENT_SCHEME_VALUES`)     | `2/3/4/5/6`               | 由命宫干支确定；影响布星与大限方向                     |
 
 ### 流水线概览
 
@@ -140,26 +140,27 @@ flowchart TD
 ### 设计考量
 
 - **纯算法隔离**：`rules/*` 保持无状态、可单测，`services/*` 才接触 runtime 依赖。
-- **可配置性**：闰月、晚子时、年分界等差异均通过 `GlobalConfigs` 承载；所有下游函数仅访问 `ctx.configs`。
+- **可配置性**：闰月、晚子时、年分界与布星策略等差异均通过 `GlobalConfigs` 承载；所有下游函数仅访问 `ctx.configs`。
 - **I18n 贯穿**：`calculatePalaces`、`calculateStars`、`createDecadePalace` 等通过 `ctx.i18n` 获取名称，输出即为最终展示文本。
-- **性能友好**：布星流程借助 `pipe` 串联，在 `memoCalculateStarTransformation` 中缓存四化查表结果，避免重复遍历。
+- **性能友好**：布星流程借助 remeda `pipe` 串联，在 `memoCalculateStarTransformation` 中缓存四化查表结果，避免重复遍历。
 - **确定性**：除时间换算外的函数全部 deterministic，利于快照测试、回归验证。
 
 ## Runtime 与依赖注入
 
 - `createZiWeiRuntime` 支持覆盖三类依赖：
   - `i18n`：可注入共享或受控的 `createZiWeiI18n()` 实例，用于自定义语言资源或与宿主应用共享状态。
-  - `configs`：覆盖 `GlobalConfigs` 以满足不同派别的年/月/日分界。例如 `_monthDivision = "last"` 会把闰月统一归入上个月。
+  - `configs`：覆盖 `GlobalConfigs` 以满足不同派别的年/月/日分界与布星策略。例如 `division.month = "last"` 会把闰月统一归入上个月，`star = "onlyMajor"` 可仅计算主星。
   - `now`：注入时间提供者，便于 SSR 或测试环境（如冻结时间）。
-- `ZiWeiRuntimeInvokeOptions`（等价于 `NatalCalculateOptions`）允许 pipeline 传入 `referenceDate`，覆盖单次命盘计算的大限参考日期。
+- `CreateZiWei*Params` 支持 `referenceDate`，覆盖单次命盘计算的大限参考日期。
 
 ### GlobalConfigs 速览
 
-| 字段 | 默认值 | 说明 |
-| --- | --- | --- |
-| `_yearDivision` | `"normal"` | `normal` 正月初一分界；`spring` 切换为立春分界。 |
-| `_monthDivision` | `"normal"` | 闰月归属策略：`last` 归上月，`next` 归下月，`normal` 依据十五日前后自动判断。 |
-| `_dayDivision` | `"normal"` | 晚子时处理：`normal` 视为次日，`current` 保持当日。 |
+| 字段             | 默认值     | 说明                                                                                          |
+| ---------------- | ---------- | --------------------------------------------------------------------------------------------- |
+| `division.year`  | `"normal"` | `normal` 正月初一分界；`spring` 切换为立春分界。                                              |
+| `division.month` | `"normal"` | 闰月归属策略：`last` 归上月，`next` 归下月，`normal` 依据十五日前后自动判断。                 |
+| `division.day`   | `"normal"` | 晚子时处理：`normal` 视为次日，`current` 保持当日。                                           |
+| `star`           | `"normal"` | 布星模式：`normal` 主/辅星全量，`onlyMajor` 仅主星，`onlyTransformation` 仅保留四化相关位置。 |
 
 ## 数据模型
 

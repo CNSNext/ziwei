@@ -33,9 +33,7 @@ describe("services/natal", () => {
         ...baseParams,
         solarDateByTrue: "1993-08-08 07:48",
       },
-      {
-        referenceDate: new Date("2010-01-01T00:00:00+08:00"),
-      },
+      new Date("2010-01-01T00:00:00+08:00"),
     );
 
     expect(natal.name).toBe(baseParams.name);
@@ -53,16 +51,12 @@ describe("services/natal", () => {
     });
     const decadeSpy = vi.spyOn(decadeService, "calculateDecadeByDate");
 
-    const natal = calculateNatal(
-      runtime,
-      {
-        ...baseParams,
-        name: undefined as unknown as string,
-        gender: "Yin",
-        birthYearStemKey: "Yi",
-      },
-      {},
-    );
+    const natal = calculateNatal(runtime, {
+      ...baseParams,
+      name: undefined as unknown as string,
+      gender: "Yin",
+      birthYearStemKey: "Yi",
+    });
 
     expect(natal.name).toBe("匿名");
     expect(natal.decadeDirection).toBe(1);

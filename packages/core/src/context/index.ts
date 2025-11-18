@@ -1,8 +1,5 @@
 import { type GlobalConfigs, getGlobalConfigs } from "../infra/configs";
 import { createZiWeiI18n } from "../infra/i18n";
-import type { NatalCalculateOptions } from "../typings";
-
-export interface ZiWeiRuntimeInvokeOptions extends NatalCalculateOptions {}
 
 export interface ZiWeiRuntimeOptions {
   i18n?: ReturnType<typeof createZiWeiI18n>;
@@ -19,5 +16,26 @@ export function createZiWeiRuntime(options: ZiWeiRuntimeOptions = {}) {
 }
 
 export type ZiWeiRuntime = ReturnType<typeof createZiWeiRuntime>;
+
+export interface ResolveZiWeiRuntimeOptions extends ZiWeiRuntimeOptions {
+  runtime?: ZiWeiRuntime;
+}
+
+export function resolveZiWeiRuntime(options?: ResolveZiWeiRuntimeOptions): ZiWeiRuntime {
+  if (!options) {
+    return defaultRuntime;
+  }
+
+  const { runtime, ...runtimeOptions } = options;
+  return runtime ?? createZiWeiRuntime(runtimeOptions);
+}
+
+export function withRuntime<R>(
+  fn: (runtime: ZiWeiRuntime) => R,
+  options?: ResolveZiWeiRuntimeOptions,
+) {
+  const runtime = resolveZiWeiRuntime(options);
+  return fn(runtime);
+}
 
 export const defaultRuntime: ZiWeiRuntime = createZiWeiRuntime();

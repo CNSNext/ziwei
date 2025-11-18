@@ -1,30 +1,34 @@
 import {
   createZiWeiRuntime,
-  defaultRuntime,
+  type ResolveZiWeiRuntimeOptions,
+  resolveZiWeiRuntime,
+  withRuntime,
   type ZiWeiRuntime,
-  type ZiWeiRuntimeInvokeOptions,
   type ZiWeiRuntimeOptions,
 } from "./context";
 import { calculateNatalByLunisolar, calculateNatalBySolar } from "./pipelines/natal";
 import type { CreateZiWeiLunisolarParams, CreateZiWeiSolarParams } from "./typings";
 
-export {
-  createZiWeiRuntime,
-  type ZiWeiRuntime,
-  type ZiWeiRuntimeInvokeOptions,
-  type ZiWeiRuntimeOptions,
-};
+type CreateZiWeiOptions = ResolveZiWeiRuntimeOptions;
 
-export function createZiWeiBySolar(
-  params: CreateZiWeiSolarParams,
-  options?: ZiWeiRuntimeInvokeOptions,
-) {
-  return calculateNatalBySolar(defaultRuntime, params, options);
+export { createZiWeiRuntime, type ZiWeiRuntime, type ZiWeiRuntimeOptions };
+
+export function withZiWeiRuntime(options?: CreateZiWeiOptions) {
+  const runtime = resolveZiWeiRuntime(options);
+  return {
+    createZiWeiBySolar: (params: CreateZiWeiSolarParams) => calculateNatalBySolar(params)(runtime),
+    createZiWeiByLunisolar: (params: CreateZiWeiLunisolarParams) =>
+      calculateNatalByLunisolar(params)(runtime),
+  };
+}
+
+export function createZiWeiBySolar(params: CreateZiWeiSolarParams, options?: CreateZiWeiOptions) {
+  return withRuntime(calculateNatalBySolar(params), options);
 }
 
 export function createZiWeiByLunisolar(
   params: CreateZiWeiLunisolarParams,
-  options?: ZiWeiRuntimeInvokeOptions,
+  options?: CreateZiWeiOptions,
 ) {
-  return calculateNatalByLunisolar(defaultRuntime, params, options);
+  return withRuntime(calculateNatalByLunisolar(params), options);
 }

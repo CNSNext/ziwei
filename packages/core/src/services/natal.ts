@@ -4,7 +4,7 @@ import { createNatal } from "../models/natal";
 import { calculateFiveElementScheme } from "../rules/element";
 import { calculateMainPalaceIndex, calculatePalaceStemsAndBranches } from "../rules/palace";
 import { calculateStarIndex } from "../rules/star";
-import type { NatalCalculateOptions, NatalCalculateParams } from "../typings";
+import type { NatalCalculateParams } from "../typings";
 import { calculateDecadeByDate } from "./decade";
 import { calculatePalaces } from "./palace";
 
@@ -24,7 +24,7 @@ export function calculateNatal(
     lunisolarDate,
     sexagenaryCycleDate,
   }: NatalCalculateParams,
-  { referenceDate }: NatalCalculateOptions = {},
+  referenceDate?: Date,
 ) {
   const palaceStemsAndBranches = calculatePalaceStemsAndBranches(birthYearStemKey);
   const mainPalaceIndex = calculateMainPalaceIndex(monthIndex, hourIndex);

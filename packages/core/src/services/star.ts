@@ -1,3 +1,4 @@
+import { map, pipe } from "remeda";
 import { BRANCH_KEYS } from "../constants";
 import type { ZiWeiRuntime } from "../context";
 import { createStar } from "../models/star";
@@ -9,7 +10,6 @@ import {
   memoCalculateStarTransformation,
 } from "../rules/star";
 import type { Star, StemKey } from "../typings";
-import { pipe } from "../utils/function/pipe";
 import { oppositeIndex, wrapIndex } from "../utils/math";
 
 export type StarsCalculateParams = Omit<
@@ -28,8 +28,18 @@ export function calculateStars(
     hourIndex,
   }: StarsCalculateParams,
 ) {
-  const stars = pipe(
-    () => BRANCH_KEYS.map<Star[]>(() => []),
+  const stars = map(BRANCH_KEYS, () => []);
+  if (ctx.configs.star === "onlyMajor") {
+    return calculateMajorStars(ctx, {
+      stars,
+      stemBranches,
+      ziweiIndex,
+      tianfuIndex,
+      birthYearStemKey,
+    });
+  }
+  return pipe(
+    stars,
     (stars) =>
       calculateMajorStars(ctx, {
         stars,
@@ -46,9 +56,7 @@ export function calculateStars(
         hourIndex,
         birthYearStemKey,
       }),
-  )();
-
-  return stars;
+  );
 }
 
 export interface MajorStarsCalculateParams {
@@ -79,7 +87,11 @@ export function calculateMajorStars(
   ctx: ZiWeiRuntime,
   { stars, stemBranches, ziweiIndex, tianfuIndex, birthYearStemKey }: MajorStarsCalculateParams,
 ) {
-  const _majorStars = createMajorStarsMeta(ziweiIndex, tianfuIndex);
+  const _majorStars = createMajorStarsMeta(
+    ziweiIndex,
+    tianfuIndex,
+    ctx.configs.star === "onlyTransformation",
+  );
 
   return _majorStars.reduce((result, { key, startIndex, direction, galaxy }, index) => {
     if (key) {

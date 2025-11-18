@@ -66,6 +66,7 @@
   ],
   "dependencies": {
     "@ziweijs/i18n": "workspace:*",
+    "remeda": "2.32.0",
     "tyme4ts": "catalog:"
   },
   "devDependencies": {

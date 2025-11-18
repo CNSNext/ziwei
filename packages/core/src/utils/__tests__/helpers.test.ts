@@ -1,8 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { type MemoizeCache, memoize } from "../memoize";
-import { pipe } from "../pipe";
 
-describe("utils/function helpers", () => {
+describe("utils helpers", () => {
   it("memoize 支持自定义缓存 key", () => {
     const spy = vi.fn(({ value }: { value: number }) => value * 2);
     const memoized = memoize(spy, {
@@ -54,32 +53,5 @@ describe("utils/function helpers", () => {
     expect(memoized(3)).toBe(15);
     expect(memoized(3)).toBe(15);
     expect(spy).toHaveBeenCalledTimes(1);
-  });
-
-  it("pipe 可串联多个函数并传递参数", () => {
-    const pipeline = pipe(
-      (a: number, b: number) => a + b,
-      (sum) => sum * 2,
-      (product) => `value:${product}`,
-    );
-
-    expect(pipeline(2, 3)).toBe("value:10");
-  });
-
-  it("pipe 无函数时返回首个参数", () => {
-    const passthrough = pipe();
-    expect(passthrough("foo", "bar")).toBe("foo");
-  });
-
-  it("pipe 会保留首个函数的 this 上下文", () => {
-    const pipeline = pipe(
-      function (this: { base: number }, value: number) {
-        return this.base + value;
-      },
-      (sum) => sum * 3,
-    );
-
-    const receiver = { base: 2, run: pipeline };
-    expect(receiver.run(4)).toBe(18);
   });
 });

@@ -45,10 +45,7 @@ describe("utils/date", () => {
 
     expect(normalized.getLunarDay().getDay()).toBe(lateZi.getLunarDay().next(1).getDay());
 
-    const keepCurrent = normalizeHour(lateZi, {
-      ...defaultConfigs,
-      _dayDivision: "current",
-    });
+    const keepCurrent = normalizeHour(lateZi, getGlobalConfigs({ division: { day: "current" } }));
     expect(keepCurrent.getLunarDay().getDay()).toBe(lateZi.getLunarDay().getDay());
   });
 
@@ -88,22 +85,22 @@ describe("utils/date", () => {
     expect(text).toMatch(/子时$/);
   });
 
-  it("按照 _monthDivision 策略处理闰月", () => {
+  it("按照 month division 策略处理闰月", () => {
     const spy = vi.spyOn(LunarHour, "fromYmdHms").mockReturnValue(createMockHour());
 
     const leapHour = createMockLeapLunarHour();
-    fixLeapMonth(leapHour, { ...defaultConfigs, _monthDivision: "last" });
+    fixLeapMonth(leapHour, getGlobalConfigs({ division: { month: "last" } }));
     expect(spy).toHaveBeenLastCalledWith(2023, 5, 16, 23, 0, 0);
 
-    fixLeapMonth(leapHour, { ...defaultConfigs, _monthDivision: "next" });
+    fixLeapMonth(leapHour, getGlobalConfigs({ division: { month: "next" } }));
     expect(spy).toHaveBeenLastCalledWith(2023, 7, 16, 23, 0, 0);
 
     const early = createMockLeapLunarHour({ day: 10, hour: 10 });
-    fixLeapMonth(early, { ...defaultConfigs, _monthDivision: "normal" });
+    fixLeapMonth(early, getGlobalConfigs({ division: { month: "normal" } }));
     expect(spy).toHaveBeenLastCalledWith(2023, 5, 10, 10, 0, 0);
 
     const late = createMockLeapLunarHour({ day: 15, hour: 23 });
-    fixLeapMonth(late, { ...defaultConfigs, _monthDivision: "normal" });
+    fixLeapMonth(late, getGlobalConfigs({ division: { month: "normal" } }));
     expect(spy).toHaveBeenLastCalledWith(2023, 7, 15, 23, 0, 0);
   });
 

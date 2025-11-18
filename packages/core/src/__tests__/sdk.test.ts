@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { getGlobalConfigs } from "../infra/configs";
-import { createZiWeiByLunisolar, createZiWeiBySolar, createZiWeiRuntime } from "../sdk";
+import {
+  createZiWeiByLunisolar,
+  createZiWeiBySolar,
+  createZiWeiRuntime,
+  withZiWeiRuntime,
+} from "../sdk";
 import type { CreateZiWeiLunisolarParams, CreateZiWeiSolarParams } from "../typings";
 
 const solarParams: CreateZiWeiSolarParams = {
@@ -81,5 +86,35 @@ describe("sdk/createZiWei", () => {
 
     expect(hasMinorStars).toBe(false);
     expect(natal.decade.some((item) => item.yearly.age !== 0)).toBe(true);
+  });
+
+  it("withZiWeiRuntime 绑定 runtime 后可复用 create 函数", () => {
+    const runtime = createZiWeiRuntime({ configs: getGlobalConfigs({ star: "onlyMajor" }) });
+    const { createZiWeiBySolar: boundSolar, createZiWeiByLunisolar: boundLunisolar } =
+      withZiWeiRuntime({ runtime });
+
+    const solarNatal = boundSolar(solarParams);
+    const lunisolarNatal = boundLunisolar(lunisolarParams);
+
+    const solarHasMinor = solarNatal.palaces.some((palace) =>
+      palace.stars.some((star) => star.type === "minor"),
+    );
+    const lunisolarHasMinor = lunisolarNatal.palaces.some((palace) =>
+      palace.stars.some((star) => star.type === "minor"),
+    );
+
+    expect(solarHasMinor).toBe(false);
+    expect(lunisolarHasMinor).toBe(false);
+  });
+
+  it("onlyTransformation 配置下保留四化相关主星并保留辅星", () => {
+    const natal = createZiWeiBySolar(solarParams, {
+      configs: getGlobalConfigs({ star: "onlyTransformation" }),
+    });
+
+    const flattened = natal.palaces.flatMap((palace) => palace.stars);
+    expect(flattened.some((star) => star.key === "TianFu")).toBe(false);
+    expect(flattened.some((star) => star.key === "TianXiang" || star.key === "QiSha")).toBe(false);
+    expect(flattened.some((star) => star.type === "minor")).toBe(true);
   });
 });

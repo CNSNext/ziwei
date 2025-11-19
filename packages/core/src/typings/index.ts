@@ -177,9 +177,11 @@ export interface NatalProps {
   /** 阴阳合历日期 */
   lunisolarDate: string;
   /** 干支日期 */
-  sexagenaryCycleDate?: string;
+  sexagenaryCycleDate: string;
   /** 时辰 */
   hour: string;
+  /** 时辰 Key */
+  hourKey: BranchKey;
   /** 时辰对应的时间段 */
   hourRange: HourRange;
   /** 生肖 */

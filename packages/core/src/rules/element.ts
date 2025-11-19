@@ -8,6 +8,12 @@ import {
 import type { BranchKey, StemKey } from "../typings";
 import { wrapIndex } from "../utils/math";
 
+/**
+ *
+ * @param stemKey 出生年干
+ * @param branchKey 命宫地支
+ * @returns
+ */
 export function calculateFiveElementScheme(stemKey: StemKey, branchKey: BranchKey) {
   // 获取天干和地支的索引
   const stemIndex = STEM_KEYS.indexOf(stemKey);

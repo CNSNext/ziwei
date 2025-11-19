@@ -29,3 +29,5 @@ coverage/
 # moon
 .moon/cache
 .moon/docker
+
+.codex/

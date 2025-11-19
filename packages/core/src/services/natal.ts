@@ -28,11 +28,10 @@ export function calculateNatal(
 ) {
   const palaceStemsAndBranches = calculatePalaceStemsAndBranches(birthYearStemKey);
   const mainPalaceIndex = calculateMainPalaceIndex(monthIndex, hourIndex);
-  const { stemKey: mainPalaceStemKey, branchKey: mainPalaceBranchKey } =
-    palaceStemsAndBranches[mainPalaceIndex];
+  const { branchKey: mainPalaceBranchKey } = palaceStemsAndBranches[mainPalaceIndex];
 
   const { fiveElementSchemeName, fiveElementSchemeValue } = calculateFiveElementScheme(
-    mainPalaceStemKey,
+    birthYearStemKey,
     mainPalaceBranchKey,
   );
 
@@ -77,6 +76,7 @@ export function calculateNatal(
     lunisolarDate,
     sexagenaryCycleDate,
     hour: `${ctx.i18n.$t(`branch.${BRANCH_KEYS[hourIndex]}`)}${ctx.i18n.$t("hour")}`,
+    hourKey: BRANCH_KEYS[hourIndex],
     hourRange: HOUR_RANGES[hourIndex],
     zodiac: ctx.i18n.$t(`zodiac.${birthYearBranchKey}`),
     fiveElementSchemeValue,

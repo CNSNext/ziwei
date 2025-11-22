@@ -5,8 +5,8 @@ export default function App() {
   return (
     <div>
       <ZiWei
-        width={600}
-        height={600}
+        width={window.innerWidth}
+        height={window.innerWidth}
         name="xx"
         date="1998-1-23-1"
         gender="Yang"

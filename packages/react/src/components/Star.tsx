@@ -1,5 +1,5 @@
 import type { Palace, StarProps as ZiWeiStarProps } from "@ziweijs/core";
-import { use } from "react";
+import { memo, use } from "react";
 import { ConfigContext } from "../context/config";
 import { RuntimeContainer } from "../hooks/runtime";
 import ArrowLine from "./ArrowLine";
@@ -20,7 +20,7 @@ export interface StarProps extends ZiWeiStarProps {
   starKey: ZiWeiStarProps["key"];
 }
 
-export default function Star({ index, x, y, name, fill, palace, starKey, YT, ST }: StarProps) {
+function Star({ index, x, y, name, fill, palace, starKey, YT, ST }: StarProps) {
   const {
     palaceSide,
     palacePadding,
@@ -186,3 +186,5 @@ export default function Star({ index, x, y, name, fill, palace, starKey, YT, ST 
     </g>
   );
 }
+
+export default memo(Star);

@@ -1,7 +1,7 @@
-import { useId } from "react";
+import { memo, useId } from "react";
 
 // 箭头类型：支持单向/双向，未来新增类型只需在此扩展
-type ArrowType = "triangle" | "triangle-double" | "diamond" | "diamond-double"; // 示例新增diamond类型
+type ArrowType = "triangle" | "triangle-double" | "diamond" | "diamond-double";
 
 // 定义箭头配置接口：规范每种箭头的起点/终点样式
 interface ArrowConfig {
@@ -34,7 +34,7 @@ export interface ArrowLineProps {
   strokeLinecap?: "round" | "square" | "butt";
 }
 
-export default function ArrowLine({
+function ArrowLine({
   points,
   stroke = "#333",
   strokeWidth = 2,
@@ -55,8 +55,7 @@ export default function ArrowLine({
   // 生成折线path的d属性（M:起点，L:后续点）
   const d = () => {
     const [firstX, firstY] = points[0];
-    let pathData = `M ${firstX},${firstY}`; // 移动到起点
-    // 依次连接后续点
+    let pathData = `M ${firstX},${firstY}`;
     for (let i = 1; i < points.length; i++) {
       const [x, y] = points[i];
       pathData += ` L ${x},${y}`;
@@ -186,8 +185,6 @@ export default function ArrowLine({
           </marker>
         )}
       </defs>
-
-      {/* 折线路径：引用箭头标记作为末端装饰 */}
       <path
         d={d()}
         stroke={stroke}
@@ -201,3 +198,5 @@ export default function ArrowLine({
     </svg>
   );
 }
+
+export default memo(ArrowLine);

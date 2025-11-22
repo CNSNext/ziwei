@@ -1,4 +1,4 @@
-import { use, useMemo } from "react";
+import { memo, use, useMemo } from "react";
 import { ConfigContext } from "../context/config";
 
 export interface LaiYinProps {
@@ -7,7 +7,7 @@ export interface LaiYinProps {
   type?: "D" | "X";
 }
 
-export default function LaiYin({ x, y, type = "D" }: LaiYinProps) {
+function LaiYin({ x, y, type = "D" }: LaiYinProps) {
   const {
     laiYinFlagWidth,
     laiYinFlagHeight,
@@ -84,3 +84,5 @@ export default function LaiYin({ x, y, type = "D" }: LaiYinProps) {
     </svg>
   );
 }
+
+export default memo(LaiYin);

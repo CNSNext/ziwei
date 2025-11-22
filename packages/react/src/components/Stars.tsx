@@ -1,5 +1,5 @@
 import { MINOR_STARS, type Palace, type StarKey, type Star as StarModel } from "@ziweijs/core";
-import { use, useCallback, useMemo } from "react";
+import { memo, use, useCallback, useMemo } from "react";
 import { ConfigContext } from "../context/config";
 import Star from "./Star";
 
@@ -10,7 +10,7 @@ export interface StarsProps {
   palace: Palace;
 }
 
-export default function Stars({ data, x, y, palace }: StarsProps) {
+function Stars({ data, x, y, palace }: StarsProps) {
   const { fontSize, fontLineHeight, fontColor, ziweiColor, minorStarColor } = use(ConfigContext);
 
   const starColor = useCallback(
@@ -48,3 +48,5 @@ export default function Stars({ data, x, y, palace }: StarsProps) {
     </g>
   );
 }
+
+export default memo(Stars);

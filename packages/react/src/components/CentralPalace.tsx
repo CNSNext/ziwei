@@ -5,7 +5,9 @@ export interface CentralBoardProps {
   y?: number;
 }
 
-export default function CentralPalace({ width, height, x, y }: CentralBoardProps) {
+import { memo } from "react";
+
+function CentralPalace({ width, height, x, y }: CentralBoardProps) {
   return (
     <svg x={x} y={y}>
       <title>中宫</title>
@@ -13,3 +15,5 @@ export default function CentralPalace({ width, height, x, y }: CentralBoardProps
     </svg>
   );
 }
+
+export default memo(CentralPalace);

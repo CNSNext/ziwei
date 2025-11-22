@@ -82,6 +82,7 @@ export default function DestinyBoard({
 
   const selectedRef = useRef<number>(decadeIndex);
 
+  // 宫位左上角坐标，依赖布局配置，memo 化避免重复创建
   const coordinates = [
     {
       x: boardX + boardPadding,

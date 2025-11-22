@@ -1,5 +1,5 @@
 import { useLongPress } from "ahooks";
-import { type MouseEventHandler, type PropsWithChildren, use, useRef } from "react";
+import { type MouseEventHandler, memo, type PropsWithChildren, use, useRef } from "react";
 import { ConfigContext } from "../context/config";
 
 export interface PalaceProps {
@@ -14,7 +14,7 @@ export interface PalaceProps {
   onLongPress?: (e: MouseEvent | TouchEvent) => void;
 }
 
-export default function Palace({
+function Palace({
   name,
   x,
   y,
@@ -62,3 +62,5 @@ export default function Palace({
     </svg>
   );
 }
+
+export default memo(Palace);

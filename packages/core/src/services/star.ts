@@ -221,3 +221,65 @@ export function calculateMinorStars(
     return result;
   }, stars);
 }
+
+export interface StarsByStemBranchCalculateParams {
+  birthYearStemKey: StemKey;
+  stemBranches: StemBranch[];
+  ziweiIndex: number;
+  tianfuIndex: number;
+}
+
+// 根据指定的干支来计算星辰排列
+export function calculateStarsByStemBranch(
+  ctx: ZiWeiRuntime,
+  { birthYearStemKey, ziweiIndex, tianfuIndex, stemBranches }: StarsByStemBranchCalculateParams,
+) {
+  const stars: Star[][] = map(BRANCH_KEYS, () => []);
+
+  const _majorStars = createMajorStarsMeta(ziweiIndex, tianfuIndex);
+  return _majorStars.reduce((result, { key, startIndex, direction, galaxy }, index) => {
+    if (key) {
+      const targetIndex = wrapIndex(startIndex + direction * (index - (index >= 9 ? 9 : 0)));
+      const stemKey = stemBranches[targetIndex].stemKey;
+      const oppositeStemKey = stemBranches[oppositeIndex(targetIndex)].stemKey;
+
+      const yt_key = memoCalculateStarTransformation({
+        stemKey: birthYearStemKey,
+        starKey: key,
+      });
+
+      const st_exit_key = memoCalculateStarTransformation({
+        stemKey,
+        starKey: key,
+      });
+      const st_entry_key = memoCalculateStarTransformation({
+        stemKey: oppositeStemKey,
+        starKey: key,
+      });
+
+      const star = createStar({
+        key,
+        name: ctx.i18n.$t(`star.${key}.name`),
+        abbr: ctx.i18n.$t(`star.${key}.abbr`),
+        type: "major",
+        galaxy,
+        YT: yt_key && {
+          key: yt_key,
+          name: ctx.i18n.$t(`transformation.${yt_key}`),
+        },
+        ST: {
+          exit: st_exit_key && {
+            key: st_exit_key,
+            name: ctx.i18n.$t(`transformation.${st_exit_key}`),
+          },
+          entry: st_entry_key && {
+            key: st_entry_key,
+            name: ctx.i18n.$t(`transformation.${st_entry_key}`),
+          },
+        },
+      });
+      result[targetIndex].push(star);
+    }
+    return result;
+  }, stars);
+}

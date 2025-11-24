@@ -69,6 +69,38 @@ export function calculateDecade(
   );
 }
 
+export function calculateAllDecade(
+  ctx: ZiWeiRuntime,
+  params: Omit<DecadeCalculateParams, "index">,
+): DecadeVO[][] {
+  return params.palaces.map((_, palaceIndex) => {
+    return calculateDecade(ctx, {
+      ...params,
+      index: palaceIndex,
+    });
+  });
+}
+
+export function calculateDecadeIndexByDate(
+  ctx: ZiWeiRuntime,
+  { palaces, birthYear, date }: DecadeByDateCalculateParams,
+) {
+  // 默认获取指定日期的阴历年份，计算目标年份的大限索引
+  const lunisolarDate = calculateLunisolarDateBySolar(date);
+  const { year } = calculateNatalDateBySolar({ date: lunisolarDate, globalConfigs: ctx.configs });
+  // 虚岁
+  const age = year - birthYear + 1;
+  // 当前所在年份的大命索引
+  const horoscopeMainPalaceIndex = palaces.findIndex(
+    (palace) => age >= palace.decadeRanges[0] && age <= palace.decadeRanges[1],
+  );
+  // 若当前大限找不到时，重置到本命宫的索引
+  const fixHoroscopeMainPalaceIndex =
+    horoscopeMainPalaceIndex === -1 ? 0 : horoscopeMainPalaceIndex;
+
+  return fixHoroscopeMainPalaceIndex;
+}
+
 export interface DecadePalaceCreateParams {
   palaceIndex: number;
   mainPalaceIndex: number;

@@ -6,8 +6,16 @@ import {
   type ZiWeiRuntime,
   type ZiWeiRuntimeOptions,
 } from "./context";
-import { calculateNatalByLunisolar, calculateNatalBySolar } from "./pipelines/natal";
-import type { CreateZiWeiLunisolarParams, CreateZiWeiSolarParams } from "./typings";
+import {
+  calculateNatalByLunisolar,
+  calculateNatalBySolar,
+  calculateNatalByStemBranch,
+} from "./pipelines/natal";
+import type {
+  CreateZiWeiByStemBranchParams,
+  CreateZiWeiLunisolarParams,
+  CreateZiWeiSolarParams,
+} from "./typings";
 
 type CreateZiWeiOptions = ResolveZiWeiRuntimeOptions;
 
@@ -31,4 +39,11 @@ export function createZiWeiByLunisolar(
   options?: CreateZiWeiOptions,
 ) {
   return withRuntime(calculateNatalByLunisolar(params), options);
+}
+
+export function createZiWeiByStemBranch(
+  params: CreateZiWeiByStemBranchParams,
+  options?: CreateZiWeiOptions,
+) {
+  return withRuntime(calculateNatalByStemBranch(params), options);
 }

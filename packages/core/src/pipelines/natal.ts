@@ -1,7 +1,11 @@
 import { LunarHour } from "tyme4ts";
 import type { ZiWeiRuntime } from "../context";
-import { calculateNatal } from "../services/natal";
-import type { CreateZiWeiLunisolarParams, CreateZiWeiSolarParams } from "../typings";
+import { _calculateNatalByStemBranch, calculateNatal } from "../services/natal";
+import type {
+  CreateZiWeiLunisolarParams,
+  CreateZiWeiSolarParams,
+  NatalByStemBranchCalculateParams,
+} from "../typings";
 import {
   calculateHourByIndex,
   calculateLunisolarDateBySolar,
@@ -91,4 +95,21 @@ export const calculateNatalByLunisolar =
       },
       referenceDate,
     );
+  };
+
+export const calculateNatalByStemBranch =
+  ({
+    birthYearStemKey,
+    branchKey,
+    mainPalaceBranchKey,
+    language,
+  }: NatalByStemBranchCalculateParams) =>
+  (runtime: ZiWeiRuntime) => {
+    language && runtime.i18n.setCurrentLanguage(language);
+    // 根据指定的地支位置来计算星辰排列
+    return _calculateNatalByStemBranch(runtime, {
+      birthYearStemKey,
+      branchKey,
+      mainPalaceBranchKey,
+    });
   };

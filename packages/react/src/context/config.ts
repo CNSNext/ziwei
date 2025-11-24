@@ -75,6 +75,8 @@ export interface ConfigContextProps {
   flyingTransformationColor: string;
   /** 紫微星的颜色 */
   ziweiColor: string;
+  /** 紫微宫的填充颜色 */
+  ziweiPalaceFill: string;
   /** 左右昌曲的颜色 */
   minorStarColor: string;
   /** 流年的字体大小 */

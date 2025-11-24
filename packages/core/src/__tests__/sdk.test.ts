@@ -71,7 +71,8 @@ describe("sdk/createZiWei", () => {
       runtimeOptions,
     );
 
-    expect(natalWithRuntimeNow.decade).not.toEqual(natalWithReferenceDate.decade);
+    // 运限结构与起局无关，referenceDate 仅影响 decadeIndex
+    expect(natalWithRuntimeNow.decadeIndex).not.toEqual(natalWithReferenceDate.decadeIndex);
   });
 
   it("可以复用外部构造的 runtime 并继续接收调用选项", () => {
@@ -85,7 +86,7 @@ describe("sdk/createZiWei", () => {
     );
 
     expect(hasMinorStars).toBe(false);
-    expect(natal.decade.some((item) => item.yearly.age !== 0)).toBe(true);
+    expect(natal.decade[natal.decadeIndex].some((item) => item.yearly.age !== 0)).toBe(true);
   });
 
   it("withZiWeiRuntime 绑定 runtime 后可复用 create 函数", () => {

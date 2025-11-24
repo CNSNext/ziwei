@@ -1,15 +1,14 @@
 import type { Palace, StarProps as ZiWeiStarProps } from "@ziweijs/core";
 import { memo, use } from "react";
 import { ConfigContext } from "../context/config";
-import { RuntimeContainer } from "../hooks/runtime";
+import { RenderContext } from "../context/render";
+import { RuntimeContainer } from "../hooks/useRuntime";
+import {
+  computeBaseMetrics,
+  computeExitArrowLayout,
+  orientationFromPalaceIndex,
+} from "../tools/starUtil";
 import ArrowLine from "./ArrowLine";
-
-const [bottom, left, top, right] = [
-  [0, 11, 10, 9],
-  [1, 2],
-  [3, 4, 5, 6],
-  [7, 8],
-];
 
 export interface StarProps extends ZiWeiStarProps {
   index: number;
@@ -36,27 +35,54 @@ function Star({ index, x, y, name, fill, palace, starKey, YT, ST }: StarProps) {
     flyingTransformationFill,
     flyingTransformationColor,
   } = use(ConfigContext);
+  const { showTransformation, showSelf } = use(RenderContext);
   const { flyingTransformations } = RuntimeContainer.useContainer();
 
-  const hasFlying = flyingTransformations.includes(starKey);
-
-  const [width, height, padding] = [fontSize * fontLineHeight, fontSize * 2, palaceStrokeWidth * 2];
+  // Base metrics needed by multiple elements
+  const { width, height, padding, centerX } = computeBaseMetrics({
+    x,
+    fontSize,
+    fontLineHeight,
+    palaceStrokeWidth,
+  });
+  const flyingIndex = flyingTransformations.indexOf(starKey);
+  const hasFlying = flyingIndex !== -1;
+  const highlightFill = hasFlying ? flyingTransformationFill[flyingIndex] : undefined;
+  const exitKey = ST?.exit?.key;
+  const orientation = orientationFromPalaceIndex(palace.index);
+  const exitLayout =
+    ST?.exit &&
+    computeExitArrowLayout({
+      x,
+      y,
+      index,
+      orientation,
+      fontSize,
+      fontLineHeight,
+      palaceStrokeWidth,
+      selfTransformationMarginTop,
+      palaceSide,
+      boardStrokeWidth,
+      boardPadding,
+      selfTransformationFontSize,
+      palacePadding,
+    });
 
   return (
     <g>
-      <rect
-        x={x}
-        y={y}
-        width={width}
-        height={height + padding}
-        fill={
-          hasFlying
-            ? flyingTransformationFill[flyingTransformations.indexOf(starKey)]
-            : "transparent"
-        }
-      />
+      {/* Background highlight for flying transformation; omit node entirely if not active */}
+      {hasFlying && (
+        <rect
+          x={x}
+          y={y}
+          width={width}
+          height={height + padding}
+          fill={highlightFill}
+          pointerEvents="none"
+        />
+      )}
       <text
-        x={x + (fontSize * fontLineHeight) / 2}
+        x={centerX}
         y={y + padding / 2}
         writingMode="vertical-rl"
         fontSize={fontSize}
@@ -67,9 +93,9 @@ function Star({ index, x, y, name, fill, palace, starKey, YT, ST }: StarProps) {
         {name}
       </text>
       {/*生年四化*/}
-      {YT?.key && (
+      {showTransformation && YT?.key && (
         <text
-          x={x + (fontSize * fontLineHeight) / 2}
+          x={centerX}
           y={y + fontSize * 3 + padding / 2}
           fontSize={fontSize}
           letterSpacing={0}
@@ -81,105 +107,23 @@ function Star({ index, x, y, name, fill, palace, starKey, YT, ST }: StarProps) {
           {YT.key}
         </text>
       )}
-      {/*离心自化*/}
-      {ST?.exit && left.includes(palace.index) && (
+      {/*离心自化：根据宫位方向绘制箭头与标签 */}
+      {showSelf && exitLayout && (
         <g>
           <ArrowLine
-            points={[
-              [
-                x + (fontSize * fontLineHeight) / 2,
-                y + fontSize * 2 + selfTransformationMarginTop + padding,
-              ],
-              [x + (fontSize * fontLineHeight) / 2, y + fontSize * (2 + 1.5 + 0.7 * index)],
-              [-boardStrokeWidth, y + fontSize * (2 + 1.5 + 0.7 * index)],
-            ]}
+            points={exitLayout.points}
             arrowSize={arrowSize}
             stroke={selfTransformationStroke}
             strokeWidth={palaceStrokeWidth}
           />
           <text
-            x={0 - boardStrokeWidth - boardPadding - (0.7 * selfTransformationFontSize) / 2}
-            y={y + fontSize * (2 + 1.5 + 0.7 * index) + (0.7 * selfTransformationFontSize) / 2}
-            fontSize={selfTransformationFontSize}
-            fill={selfTransformationStroke}
-            textAnchor="middle"
-          >
-            {ST.exit.key}
-          </text>
-        </g>
-      )}
-      {ST?.exit && right.includes(palace.index) && (
-        <g>
-          <ArrowLine
-            points={[
-              [
-                x + (fontSize * fontLineHeight) / 2,
-                y + fontSize * 2 + selfTransformationMarginTop + padding,
-              ],
-              [x + (fontSize * fontLineHeight) / 2, y + fontSize * (2 + 1.5 + 0.7 * index)],
-              [palaceSide + boardStrokeWidth, y + fontSize * (2 + 1.5 + 0.7 * index)],
-            ]}
-            arrowSize={arrowSize}
-            stroke={selfTransformationStroke}
-            strokeWidth={palaceStrokeWidth}
-          />
-          <text
-            x={
-              palaceSide + boardStrokeWidth + boardPadding + (0.7 * selfTransformationFontSize) / 2
-            }
-            y={y + fontSize * (2 + 1.5 + 0.7 * index) + (0.7 * selfTransformationFontSize) / 2}
+            x={exitLayout.label.x}
+            y={exitLayout.label.y}
             fontSize={selfTransformationFontSize}
             textAnchor="middle"
             fill={selfTransformationStroke}
           >
-            {ST.exit.key}
-          </text>
-        </g>
-      )}
-      {ST?.exit && top.includes(palace.index) && (
-        <g>
-          <ArrowLine
-            points={[
-              [x + (fontSize * fontLineHeight) / 2, y - selfTransformationMarginTop],
-              [x + (fontSize * fontLineHeight) / 2, y - palacePadding - boardStrokeWidth],
-            ]}
-            arrowSize={arrowSize}
-            stroke={selfTransformationStroke}
-            strokeWidth={palaceStrokeWidth}
-          />
-          <text
-            x={x + (fontSize * fontLineHeight) / 2}
-            y={y - palacePadding - boardStrokeWidth - boardPadding}
-            fontSize={selfTransformationFontSize}
-            textAnchor="middle"
-            fill={selfTransformationStroke}
-          >
-            {ST.exit.key}
-          </text>
-        </g>
-      )}
-      {ST?.exit && bottom.includes(palace.index) && (
-        <g>
-          <ArrowLine
-            points={[
-              [
-                x + (fontSize * fontLineHeight) / 2,
-                y + fontSize * 2 + selfTransformationMarginTop + padding,
-              ],
-              [x + (fontSize * fontLineHeight) / 2, palaceSide + boardStrokeWidth],
-            ]}
-            arrowSize={arrowSize}
-            stroke={selfTransformationStroke}
-            strokeWidth={palaceStrokeWidth}
-          />
-          <text
-            x={x + (fontSize * fontLineHeight) / 2}
-            y={palaceSide + boardPadding + boardStrokeWidth + 0.7285 * selfTransformationFontSize}
-            fontSize={selfTransformationFontSize}
-            textAnchor="middle"
-            fill={selfTransformationStroke}
-          >
-            {ST.exit.key}
+            {exitKey}
           </text>
         </g>
       )}

@@ -4,9 +4,10 @@ import { createNatal } from "../models/natal";
 import { calculateFiveElementScheme } from "../rules/element";
 import { calculateMainPalaceIndex, calculatePalaceStemsAndBranches } from "../rules/palace";
 import { calculateStarIndex } from "../rules/star";
-import type { NatalCalculateParams } from "../typings";
-import { calculateDecadeByDate } from "./decade";
-import { calculatePalaces } from "./palace";
+import type { NatalByStemBranchCalculateParams, NatalCalculateParams } from "../typings";
+import { relativeIndex } from "../utils/math";
+import { calculateAllDecade, calculateDecadeIndexByDate } from "./decade";
+import { calculatePalaces, calculatePalacesByStemBranch } from "./palace";
 
 export function calculateNatal(
   ctx: ZiWeiRuntime,
@@ -52,10 +53,17 @@ export function calculateNatal(
     fiveElementSchemeValue,
   });
 
-  const decade = calculateDecadeByDate(ctx, {
+  const decade = calculateAllDecade(ctx, {
     palaces,
     birthYearBranchKey,
     birthYear,
+  });
+
+  const decadeIndex = calculateDecadeIndexByDate(ctx, {
+    palaces,
+    birthYearBranchKey,
+    birthYear,
+    // Prefer explicit referenceDate; otherwise use runtime.now() to make behavior deterministic
     date: referenceDate ?? ctx.now(),
   });
 
@@ -83,8 +91,30 @@ export function calculateNatal(
     fiveElementSchemeName,
     palaces,
     decade,
+    decadeIndex,
     decadeDirection,
   });
 
   return natal;
+}
+
+export function _calculateNatalByStemBranch(
+  ctx: ZiWeiRuntime,
+  { branchKey, birthYearStemKey, mainPalaceBranchKey }: NatalByStemBranchCalculateParams,
+) {
+  const palaceStemsAndBranches = calculatePalaceStemsAndBranches(birthYearStemKey);
+  const mainPalaceIndex = BRANCH_KEYS.indexOf(mainPalaceBranchKey) - 2;
+
+  const ziweiIndex = BRANCH_KEYS.indexOf(branchKey) - 2;
+  const tianfuIndex = relativeIndex(ziweiIndex);
+
+  const palaces = calculatePalacesByStemBranch(ctx, {
+    stemBranches: palaceStemsAndBranches,
+    birthYearStemKey,
+    mainPalaceIndex,
+    ziweiIndex,
+    tianfuIndex,
+  });
+
+  return palaces;
 }

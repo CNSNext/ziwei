@@ -201,7 +201,9 @@ export interface NatalProps {
   /** 十二宫数据 */
   palaces: Palace[];
   /** 运限数据 */
-  decade: DecadeVO[];
+  decade: DecadeVO[][];
+  /** 当前运限索引 */
+  decadeIndex: number;
   /** 大限流向，1为顺行，-1为逆行 */
   decadeDirection: 1 | -1;
 }
@@ -215,7 +217,7 @@ export interface Natal extends NatalProps {
    */
   getDecade(index: number): DecadeVO[];
 
-  getDecadeIndex(): number;
+  getDecadeIndex(decade?: DecadeVO[]): number;
 }
 
 export interface PalaceProps {
@@ -324,4 +326,19 @@ export interface NatalCalculateParams {
   solarDateByTrue?: string;
   lunisolarDate: string;
   sexagenaryCycleDate: string;
+}
+
+export interface NatalByStemBranchCalculateParams {
+  /** 出生年干 Key */
+  birthYearStemKey: StemKey;
+  /** 命宫所在的地支 */
+  mainPalaceBranchKey: BranchKey;
+  /** 紫微星所在的地支 */
+  branchKey: BranchKey;
+
+  language?: Locale;
+}
+
+export interface CreateZiWeiByStemBranchParams extends NatalByStemBranchCalculateParams {
+  //
 }

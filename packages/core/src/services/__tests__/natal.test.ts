@@ -49,7 +49,8 @@ describe("services/natal", () => {
     const runtime = createZiWeiRuntime({
       now: () => now,
     });
-    const decadeSpy = vi.spyOn(decadeService, "calculateDecadeByDate");
+    // 现在 calculateNatal 内部通过 calculateDecadeIndexByDate 来推断大限索引
+    const decadeSpy = vi.spyOn(decadeService, "calculateDecadeIndexByDate");
 
     const natal = calculateNatal(runtime, {
       ...baseParams,

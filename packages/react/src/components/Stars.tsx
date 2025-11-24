@@ -26,16 +26,27 @@ function Stars({ data, x, y, palace }: StarsProps) {
     [ziweiColor, fontColor, minorStarColor],
   );
 
-  const onlyCfData = useMemo(() => data.filter((item) => item.ST?.exit), [data]);
+  // 预先构建自化序号索引，渲染时 O(1) 查询，避免 indexOf 带来的 O(n^2)
+  const onlyCfIndex = useMemo(() => {
+    const map = new Map<StarModel, number>();
+    let idx = 0;
+    for (const s of data) {
+      if (s.ST?.exit) {
+        map.set(s, idx);
+        idx += 1;
+      }
+    }
+    return map;
+  }, [data]);
 
   return (
     <g>
       {data.map((star, i) => {
-        const index = onlyCfData.indexOf(star);
+        const index = onlyCfIndex.get(star);
         return (
           <Star
             {...star}
-            index={index > -1 ? index : 0}
+            index={typeof index === "number" ? index : 0}
             starKey={star.key}
             key={star.key}
             x={x - fontLineHeight * fontSize * i}

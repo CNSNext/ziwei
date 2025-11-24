@@ -1,15 +1,15 @@
 import {
-  createZiWeiByLunisolar,
   type DecadeVO,
-  type GenderKey,
   i18n,
-  type Locale,
   type Palace as PalaceModel,
   type TransformationKey,
 } from "@ziweijs/core";
 import { Activity, use, useRef, useState } from "react";
 import { ConfigContext } from "../context/config";
-import { RuntimeContainer } from "../hooks/runtime";
+import { RenderContext } from "../context/render";
+import { useCentripetal } from "../hooks/useCentripetal";
+import { useCoordinates } from "../hooks/useCoordinates";
+import { RuntimeContainer } from "../hooks/useRuntime";
 import ArrowLine from "./ArrowLine";
 import CentralPalace from "./CentralPalace";
 import ContextMenu from "./ContextMenu";
@@ -18,22 +18,13 @@ import Palace from "./Palace";
 import Stars from "./Stars";
 
 export interface DestinyBoardProps {
-  width?: number;
-  height?: number;
-  name: string;
-  date: string;
-  gender: GenderKey;
-  language?: Locale;
+  side: number;
+  palaces: PalaceModel[];
+  decade: DecadeVO[][];
+  decadeIndex: number;
 }
 
-export default function DestinyBoard({
-  width = 600,
-  height = 600,
-  name,
-  date,
-  gender,
-  language,
-}: DestinyBoardProps) {
+export default function DestinyBoard({ side = 600, palaces, ...props }: DestinyBoardProps) {
   const {
     boardSide,
     boardX,
@@ -42,7 +33,6 @@ export default function DestinyBoard({
     boardStroke,
     boardStrokeWidth,
     palaceSide,
-    boardPadding,
     palaceFlyFill,
     palaceHoroscopeFill,
     palacePadding,
@@ -65,16 +55,9 @@ export default function DestinyBoard({
     centralPalaceY,
   } = use(ConfigContext);
 
-  const [natal] = useState(() =>
-    createZiWeiByLunisolar({
-      name,
-      date,
-      gender,
-      language,
-    }),
-  );
-  const [decadeIndex, setDecadeIndex] = useState<number>(natal.getDecadeIndex());
-  const [decade, setDecade] = useState<DecadeVO[]>(natal.decade);
+  const { showPalaceName, showStem, showBranch, showLaiYin, showSelf } = use(RenderContext);
+
+  const [decadeIndex, setDecadeIndex] = useState<number>(props.decadeIndex);
 
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
 
@@ -82,205 +65,12 @@ export default function DestinyBoard({
 
   const selectedRef = useRef<number>(decadeIndex);
 
-  // 宫位左上角坐标，依赖布局配置，memo 化避免重复创建
-  const coordinates = [
-    {
-      x: boardX + boardPadding,
-      y: boardY + boardPadding + palaceSide * 3,
-    },
-    {
-      x: boardX + boardPadding,
-      y: boardY + boardPadding + palaceSide * 2,
-    },
-    {
-      x: boardX + boardPadding,
-      y: boardY + boardPadding + palaceSide * 1,
-    },
-    {
-      x: boardX + boardPadding + palaceSide * 0,
-      y: boardY + boardPadding + palaceSide * 0,
-    },
-    {
-      x: boardX + boardPadding + palaceSide * 1,
-      y: boardY + boardPadding + palaceSide * 0,
-    },
-    {
-      x: boardX + boardPadding + palaceSide * 2,
-      y: boardY + boardPadding + palaceSide * 0,
-    },
-    {
-      x: boardX + boardPadding + palaceSide * 3,
-      y: boardY + boardPadding + palaceSide * 0,
-    },
-    {
-      x: boardX + boardPadding + palaceSide * 3,
-      y: boardY + boardPadding + palaceSide * 1,
-    },
-    {
-      x: boardX + boardPadding + palaceSide * 3,
-      y: boardY + boardPadding + palaceSide * 2,
-    },
-    {
-      x: boardX + boardPadding + palaceSide * 3,
-      y: boardY + boardPadding + palaceSide * 3,
-    },
-    {
-      x: boardX + boardPadding + palaceSide * 2,
-      y: boardY + boardPadding + palaceSide * 3,
-    },
-    {
-      x: boardX + boardPadding + palaceSide * 1,
-      y: boardY + boardPadding + palaceSide * 3,
-    },
-  ];
+  const coordinates = useCoordinates();
 
   const { flyingPalaceKey, setFlyingPalaceKey, setFlyingTransformations } =
     RuntimeContainer.useContainer();
 
-  const _CP: Array<{
-    points: [number, number][];
-    text: {
-      x: number;
-      y: number;
-    };
-  }> = [
-    // 0
-    {
-      points: [
-        [palaceSide * 3, -palaceSide * 2],
-        [palaceSide + palaceStrokeWidth * 2, -palaceStrokeWidth * 2],
-      ],
-      text: {
-        x: palaceSide + palaceStrokeWidth * 2 + fontSize * 1.5,
-        y: -palaceStrokeWidth * 2 - fontSize / 3,
-      },
-    },
-    // 1
-    {
-      points: [
-        [palaceSide * 3 - palaceStrokeWidth, -palaceSide * 0.5 + palaceStrokeWidth],
-        [palaceSide + palaceStrokeWidth * 2, palaceSide * 0.5 - palaceStrokeWidth * 1.5],
-      ],
-      text: {
-        x: palaceSide + palaceStrokeWidth * 3 + fontSize,
-        y: palaceSide * 0.5 - palaceStrokeWidth * 2 - fontSize,
-      },
-    },
-    // 2
-    {
-      points: [
-        [palaceSide * 3, palaceSide * 1.5],
-        [palaceSide + palaceStrokeWidth * 2, palaceSide * 0.5 - palaceStrokeWidth],
-      ],
-      text: {
-        x: palaceSide + palaceStrokeWidth * 2 + fontSize * 1.5,
-        y: palaceSide * 0.5 - palaceStrokeWidth + fontSize / 3,
-      },
-    },
-
-    // 3
-    {
-      points: [
-        [palaceSide * 3, palaceSide * 3],
-        [palaceSide + palaceStrokeWidth * 2, palaceSide + palaceStrokeWidth * 2],
-      ],
-      text: {
-        x: palaceSide + palaceStrokeWidth * 2 + fontSize * 1.5,
-        y: palaceSide + palaceStrokeWidth * 2 + fontSize,
-      },
-    },
-
-    // 4
-    {
-      points: [
-        [palaceSide * 1.5, palaceSide * 3],
-        [palaceSide * 0.5 + palaceStrokeWidth * 2, palaceSide + palaceStrokeWidth * 2],
-      ],
-      text: {
-        x: palaceSide * 0.5 + palaceStrokeWidth * 2 + fontSize * 1.5,
-        y: palaceSide + palaceStrokeWidth * 2 + fontSize,
-      },
-    },
-    // 5
-    {
-      points: [
-        [-palaceSide * 0.5 - palaceStrokeWidth, palaceSide * 3],
-        [palaceSide * 0.5 - palaceStrokeWidth * 1.5, palaceSide + palaceStrokeWidth * 2],
-      ],
-      text: {
-        x: palaceSide * 0.5 + palaceStrokeWidth - fontSize * 1.5,
-        y: palaceSide + palaceStrokeWidth * 2 + fontSize,
-      },
-    },
-    // 6
-    {
-      points: [
-        [-palaceSide * 2, palaceSide * 3],
-        [-palaceStrokeWidth * 2, palaceSide + palaceStrokeWidth * 2],
-      ],
-      text: {
-        x: -palaceStrokeWidth * 2 - fontSize * 1.5,
-        y: palaceSide + palaceStrokeWidth * 2 + fontSize,
-      },
-    },
-
-    // 7
-    {
-      points: [
-        [-palaceSide * 2 + palaceStrokeWidth, palaceSide * 1.5 - palaceStrokeWidth],
-        [-palaceStrokeWidth * 2, palaceSide * 0.5 + palaceStrokeWidth * 1.5],
-      ],
-      text: {
-        x: -palaceStrokeWidth * 2 - fontSize * 1.5,
-        y: palaceSide * 0.5 + palaceStrokeWidth * 2,
-      },
-    },
-
-    // 8
-    {
-      points: [
-        [-palaceSide * 2 + palaceStrokeWidth, -palaceSide * 0.5 - palaceStrokeWidth * 1.5],
-        [-palaceStrokeWidth * 2, palaceSide * 0.5 - palaceStrokeWidth],
-      ],
-      text: {
-        x: -palaceStrokeWidth * 3 - fontSize * 0.7,
-        y: palaceSide * 0.5 - palaceStrokeWidth - fontSize,
-      },
-    },
-    // 9
-    {
-      points: [
-        [-palaceSide * 2 + palaceStrokeWidth, -palaceSide * 2 + palaceStrokeWidth],
-        [-palaceStrokeWidth * 2, -palaceStrokeWidth * 2],
-      ],
-      text: {
-        x: -palaceStrokeWidth * 2 - fontSize / 2,
-        y: -palaceStrokeWidth * 2 - palaceStrokeWidth - fontSize,
-      },
-    },
-    // 10
-    {
-      points: [
-        [-palaceSide * 0.5 + palaceStrokeWidth * 1.5, -palaceSide * 2 + palaceStrokeWidth],
-        [palaceSide * 0.5 - palaceStrokeWidth * 1, -palaceStrokeWidth * 2],
-      ],
-      text: {
-        x: palaceSide * 0.5 - fontSize * 1.5,
-        y: -palaceStrokeWidth * 2 - fontSize / 3,
-      },
-    },
-    // 11
-    {
-      points: [
-        [palaceSide * 1.5 - palaceStrokeWidth, -palaceSide * 2 + palaceStrokeWidth],
-        [palaceSide * 0.5, -palaceStrokeWidth * 2],
-      ],
-      text: {
-        x: palaceSide * 0.5 + fontSize * 1.5,
-        y: -palaceStrokeWidth * 2 - fontSize / 3,
-      },
-    },
-  ];
+  const _CP = useCentripetal();
 
   const getPalaceFill = (palace: PalaceModel) => {
     if (flyingPalaceKey === palace.key) {
@@ -293,10 +83,10 @@ export default function DestinyBoard({
   };
 
   return (
-    <svg width={width} height={height} ref={ref}>
+    <svg width={side} height={side} ref={ref}>
       <title>紫微斗数</title>
       <g>
-        <rect width={width} height={width} fill={boardFill} />
+        <rect width={side} height={side} fill={boardFill} />
         <rect
           x={boardX}
           y={boardY}
@@ -305,8 +95,9 @@ export default function DestinyBoard({
           fill={boardFill}
           stroke={boardStroke}
           strokeWidth={boardStrokeWidth}
+          shapeRendering="crispEdges"
         />
-        {natal.palaces.map((palace, index) => {
+        {palaces.map((palace, index) => {
           const currentTransformations = palace.stars.reduce<TransformationKey[]>(
             (result, star) => {
               if (star.ST?.entry) {
@@ -317,13 +108,14 @@ export default function DestinyBoard({
             [],
           );
           const hasCP = currentTransformations.length > 0;
-
+          const hasZiWei = palace.stars.some((star) => star.key === "ZiWei");
           return (
             <Palace
               key={palace.key}
               name={palace.name}
               width={palaceSide}
               height={palaceSide}
+              hasZiWei={hasZiWei}
               x={coordinates[index].x}
               y={coordinates[index].y}
               fill={getPalaceFill(palace)}
@@ -358,16 +150,17 @@ export default function DestinyBoard({
               }}
             >
               {/* 宫位信息 */}
-              {palace.isLaiYin && <LaiYin x={laiYinFlagX} y={laiYinFlagY} type="D" />}
+              {showLaiYin && palace.isLaiYin && <LaiYin x={laiYinFlagX} y={laiYinFlagY} type="D" />}
               {/* 宫位信息 - 干支 */}
-              <svg x={0} y={verticalRectHeight * 2} overflow="visible">
+              <g transform={`translate(0, ${verticalRectHeight * 2})`}>
                 <title>干支</title>
                 <rect
                   width={verticalRectWidth}
                   height={verticalRectHeight}
                   fill="transparent"
                   stroke={boardStroke}
-                  strokeWidth={palaceStrokeWidth}
+                  strokeWidth={showBranch && showStem ? palaceStrokeWidth : 0}
+                  shapeRendering="crispEdges"
                 />
                 <text
                   x={verticalRectWidth / 2}
@@ -377,78 +170,87 @@ export default function DestinyBoard({
                   letterSpacing={0}
                   wordSpacing={0}
                 >
-                  {palace.stem.name}
-                  {palace.branch.name}
+                  {showStem && palace.stem.name}
+                  {showBranch && palace.branch.name}
                 </text>
-              </svg>
+              </g>
               {/* 宫位信息 - 大限宫职 */}
-              <svg x={verticalRectWidth} y={verticalRectHeight * 2} overflow="visible">
-                <title>大限宫职</title>
-                <rect
-                  width={horizontalRectWidth}
-                  height={horizontalRectHeight}
-                  fill="transparent"
-                  stroke={boardStroke}
-                  strokeWidth={palaceStrokeWidth}
-                />
-                <text
-                  x={horizontalRectWidth / 2 - fontSize}
-                  y={
-                    fontSize * fontLineHeight -
-                    (horizontalRectHeight - fontSize * fontLineHeight) / 2
-                  }
-                  fontSize={fontSize}
-                  letterSpacing={0}
-                  wordSpacing={0}
-                >
-                  {decade[index].name}
-                </text>
-              </svg>
+              {showPalaceName && props.decade[decadeIndex]?.[index] && (
+                <g transform={`translate(${verticalRectWidth}, ${verticalRectHeight * 2})`}>
+                  <title>大限宫职</title>
+                  <rect
+                    width={horizontalRectWidth}
+                    height={horizontalRectHeight}
+                    fill="transparent"
+                    stroke={boardStroke}
+                    strokeWidth={palaceStrokeWidth}
+                    shapeRendering="crispEdges"
+                  />
+                  <text
+                    x={horizontalRectWidth / 2 - fontSize}
+                    y={
+                      fontSize * fontLineHeight -
+                      (horizontalRectHeight - fontSize * fontLineHeight) / 2
+                    }
+                    fontSize={fontSize}
+                    letterSpacing={0}
+                    wordSpacing={0}
+                  >
+                    {props.decade[decadeIndex][index].name}
+                  </text>
+                </g>
+              )}
               {/* 宫位信息 - 运限间隔 */}
-              <svg x={verticalRectWidth} y={verticalRectHeight * 2.5} overflow="visible">
-                <title>运限间隔</title>
-                <rect
-                  width={horizontalRectWidth}
-                  height={horizontalRectHeight}
-                  fill="transparent"
-                  stroke={boardStroke}
-                  strokeWidth={palaceStrokeWidth}
-                />
-                <text
-                  x={horizontalRectWidth / 2}
-                  y={horizontalRectHeight / 2 + fontLineHeight}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  fontSize={horoscopeRangesFontSize}
-                  letterSpacing={0}
-                  wordSpacing={0}
-                >
-                  {palace.decadeRanges.join(" ~ ")}
-                </text>
-              </svg>
+              {palace.decadeRanges.length > 0 && (
+                <g transform={`translate(${verticalRectWidth}, ${verticalRectHeight * 2.5})`}>
+                  <title>运限间隔</title>
+                  <rect
+                    width={horizontalRectWidth}
+                    height={horizontalRectHeight}
+                    fill="transparent"
+                    stroke={boardStroke}
+                    strokeWidth={palaceStrokeWidth}
+                    shapeRendering="crispEdges"
+                  />
+                  <text
+                    x={horizontalRectWidth / 2}
+                    y={horizontalRectHeight / 2 + fontLineHeight}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    fontSize={horoscopeRangesFontSize}
+                    letterSpacing={0}
+                    wordSpacing={0}
+                  >
+                    {palace.decadeRanges.join(" ~ ")}
+                  </text>
+                </g>
+              )}
               {/* 宫位信息 - 原局宫职 */}
-              <svg x={verticalRectWidth * 5} y={verticalRectHeight * 2} overflow="visible">
-                <title>干支</title>
-                <rect
-                  width={verticalRectWidth}
-                  height={verticalRectHeight}
-                  fill="transparent"
-                  stroke={boardStroke}
-                  strokeWidth={palaceStrokeWidth}
-                />
-                <text
-                  x={verticalRectWidth / 2}
-                  y={horizontalRectHeight - fontSize}
-                  writingMode="vertical-rl"
-                  fontSize={fontSize}
-                  letterSpacing={0}
-                  wordSpacing={0}
-                >
-                  {palace.name}
-                </text>
-              </svg>
+              {showPalaceName && (
+                <g transform={`translate(${verticalRectWidth * 5}, ${verticalRectHeight * 2})`}>
+                  <title>干支</title>
+                  <rect
+                    width={verticalRectWidth}
+                    height={verticalRectHeight}
+                    fill="transparent"
+                    stroke={boardStroke}
+                    strokeWidth={palaceStrokeWidth}
+                    shapeRendering="crispEdges"
+                  />
+                  <text
+                    x={verticalRectWidth / 2}
+                    y={horizontalRectHeight - fontSize}
+                    writingMode="vertical-rl"
+                    fontSize={fontSize}
+                    letterSpacing={0}
+                    wordSpacing={0}
+                  >
+                    {palace.name}
+                  </text>
+                </g>
+              )}
               {/* 流年 */}
-              {decade[index].yearly.age > 0 && (
+              {props.decade[decadeIndex]?.[index]?.yearly?.age > 0 && (
                 <text
                   x={palaceSide / 2}
                   y={verticalRectHeight * 2 - yearlyFontSize / 2}
@@ -457,7 +259,7 @@ export default function DestinyBoard({
                   wordSpacing={0}
                   textAnchor="middle"
                 >
-                  {`${decade[index].yearly.name}${i18n.$t("year")}${decade[index].yearly.age}${i18n.$t("age")}`}
+                  {`${props.decade[decadeIndex][index].yearly.name}${i18n.$t("year")}${props.decade[decadeIndex][index].yearly.age}${i18n.$t("age")}`}
                 </text>
               )}
               {/* 星辰信息 */}
@@ -468,7 +270,7 @@ export default function DestinyBoard({
                 data={palace.stars}
               />
               {/* 向心自化部分 */}
-              {hasCP && _CP[index] && (
+              {showSelf && hasCP && _CP[index] && (
                 <g>
                   <ArrowLine
                     points={_CP[index].points}
@@ -505,7 +307,6 @@ export default function DestinyBoard({
             {
               label: "入限",
               onClick: () => {
-                setDecade(natal.getDecade(selectedRef.current));
                 setDecadeIndex(selectedRef.current);
               },
             },

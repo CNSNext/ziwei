@@ -192,6 +192,8 @@ function ArrowLine({
         strokeLinecap={strokeLinecap}
         strokeDasharray={dashArray ? `${dashArray[0]},${dashArray[1]}` : undefined}
         fill="none" // 路径不填充
+        vectorEffect="non-scaling-stroke"
+        pointerEvents="none"
         markerStart={hasStartArrow ? `url(#${arrowStartId})` : undefined}
         markerEnd={`url(#${arrowEndId})`} // 末端添加箭头
       />

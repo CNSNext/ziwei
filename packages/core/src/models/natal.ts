@@ -13,8 +13,11 @@ export function createNatal(ctx: ZiWeiRuntime, props: NatalProps): Natal {
         birthYear: props.lunisolarYear,
       });
     },
-    getDecadeIndex() {
-      return props.decade.findIndex((item) => item.key === "Ming");
+    getDecadeIndex(decade) {
+      if (decade) {
+        return decade.findIndex((item) => item.key === "Ming");
+      }
+      return props.decade[props.decadeIndex].findIndex((item) => item.key === "Ming");
     },
   };
 }

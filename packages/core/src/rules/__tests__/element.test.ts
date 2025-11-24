@@ -3,13 +3,12 @@ import { FIVE_ELEMENT_SCHEME } from "../../constants";
 import { calculateFiveElementScheme } from "../element";
 
 describe("rules/element", () => {
-  it("returns 水二局 when命宫干支为甲寅", () => {
-    const scheme = calculateFiveElementScheme("Jia", "Yin");
-
+  it("returns 金四局 when命宫干支为甲寅", () => {
+    const scheme = calculateFiveElementScheme("Wu", "Chou");
     expect(scheme).toMatchObject({
-      fiveElementSchemeKey: "Shui",
-      fiveElementSchemeName: FIVE_ELEMENT_SCHEME.Shui,
-      fiveElementSchemeValue: 2,
+      fiveElementSchemeKey: "Jin",
+      fiveElementSchemeName: FIVE_ELEMENT_SCHEME.Jin,
+      fiveElementSchemeValue: 4,
     });
   });
 

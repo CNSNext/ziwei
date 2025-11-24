@@ -298,33 +298,50 @@ export const MINOR_STARS = ["ZuoFu", "YouBi", "WenChang", "WenQu"];
 // ================== FiveElement ==================
 
 export const FIVE_ELEMENT_ELEMENT = {
-  Mu: "木",
-  Jin: "金",
   Shui: "水",
-  Tu: "土",
   Huo: "火",
+  Mu: "木",
+  Tu: "土",
+  Jin: "金",
 } as const;
 
 export const FIVE_ELEMENT_SCHEME = {
-  Mu: "木三局",
-  Jin: "金三局",
   Shui: "水二局",
-  Tu: "土五局",
   Huo: "火六局",
+  Mu: "木三局",
+  Tu: "土五局",
+  Jin: "金四局",
 } as const;
 
 export const FIVE_ELEMENT_SCHEME_VALUE = {
-  Mu: 3,
-  Jin: 4,
   Shui: 2,
-  Tu: 5,
   Huo: 6,
+  Mu: 3,
+  Tu: 5,
+  Jin: 4,
 } as const;
 
-/** 五行局数 Key 数组 - 顺序不可变，影响排序计算 */
-export const FIVE_ELEMENT_KEYS = ["Mu", "Jin", "Shui", "Tu", "Huo"] as const;
-/** 五行局数 - 顺序不可变，影响排序计算 */
-export const FIVE_ELEMENT_SCHEME_VALUES = [3, 4, 2, 5, 6] as const;
+/** 五行局数 Key 数组 */
+export const FIVE_ELEMENT_KEYS = ["Shui", "Huo", "Mu", "Tu", "Jin"] as const;
+/** 五行局数 */
+export const FIVE_ELEMENT_SCHEME_VALUES = [2, 6, 3, 5, 4] as const;
+
+export const FIVE_ELEMENT_TABLE = [
+  // 甲己
+  ["Shui", "Huo", "Mu", "Tu", "Jin", "Huo"],
+
+  // 乙庚
+  ["Huo", "Tu", "Jin", "Mu", "Shui", "Tu"],
+
+  // 丙辛
+  ["Tu", "Mu", "Shui", "Jin", "Huo", "Mu"],
+
+  // 丁壬
+  ["Mu", "Jin", "Huo", "Shui", "Tu", "Jin"],
+
+  // 戊癸
+  ["Jin", "Shui", "Tu", "Huo", "Mu", "Shui"],
+] as const;
 
 // ================== Palace ==================
 export const PALACE_HANS = {

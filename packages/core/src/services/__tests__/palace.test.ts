@@ -36,7 +36,7 @@ describe("services/palace", () => {
       decadeRanges: decadeRanges[0],
     });
     expect(palaces[0].branch.name).toBe(runtime.i18n.$t("branch.Yin"));
-    expect(palaces[0].stars).not.toHaveLength(0);
+    expect(palaces[0].stars).toHaveLength(0);
     expect(palaces[ziweiIndex].stars.some((star) => star.key === "ZiWei")).toBe(true);
     expect(palaces[tianfuIndex].stars.some((star) => star.key === "TianFu")).toBe(true);
   });

@@ -19,7 +19,7 @@ catalog:
   "@vitest/ui": 4.0.13
   "@types/react": 19.2.6
   "@types/react-dom": 19.2.3
-  "@changesets/cli": 2.29.7
+  "@changesets/cli": 2.29.8
   "@changesets/changelog-github": 0.5.1
   "@moonrepo/cli": 1.41.7
   lefthook: 2.0.4

@@ -20,7 +20,7 @@ catalog:
   "@types/react": 19.2.6
   "@types/react-dom": 19.2.3
   "@changesets/cli": 2.29.7
-  "@changesets/changelog-github": 0.5.1
+  "@changesets/changelog-github": 0.5.2
   "@moonrepo/cli": 1.41.7
   lefthook: 2.0.4
   react: 19.2.0

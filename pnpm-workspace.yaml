@@ -14,7 +14,7 @@ catalog:
   '@rslib/core': 0.18.2
   '@types/react': 19.2.6
   '@types/react-dom': 19.2.3
-  '@typescript/native-preview': 7.0.0-dev.20251129.1
+  '@typescript/native-preview': 7.0.0-dev.20251130.1
   '@vitejs/plugin-react': 5.1.1
   '@vitest/browser-playwright': 4.0.14
   '@vitest/coverage-v8': 4.0.14

@@ -62,6 +62,8 @@ export function useConfig({ side, ...props }: UseConfigProps) {
       laiYinFlagY: $n(2),
       laiYinFlagFill: "transparent",
       laiYinFlagFontColor: colorPalette.r2,
+      palaceRectStrokeWidth: $n(2),
+      arrowWidth: $n(2),
       arrowSize: $n(2),
       // Star
       ziweiColor: colorPalette.p1,

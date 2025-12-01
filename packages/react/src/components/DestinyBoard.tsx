@@ -43,7 +43,8 @@ export default function DestinyBoard({ side = 600, palaces, ...props }: DestinyB
     verticalRectWidth,
     verticalRectHeight,
     horoscopeRangesFontSize,
-    palaceStrokeWidth,
+    arrowWidth,
+    palaceRectStrokeWidth,
     selfTransformationFontSize,
     selfTransformationStroke,
     laiYinFlagX,
@@ -159,7 +160,7 @@ export default function DestinyBoard({ side = 600, palaces, ...props }: DestinyB
                   height={verticalRectHeight}
                   fill="transparent"
                   stroke={boardStroke}
-                  strokeWidth={showBranch && showStem ? palaceStrokeWidth : 0}
+                  strokeWidth={showBranch && showStem ? palaceRectStrokeWidth : 0}
                   shapeRendering="crispEdges"
                 />
                 <text
@@ -183,7 +184,7 @@ export default function DestinyBoard({ side = 600, palaces, ...props }: DestinyB
                     height={horizontalRectHeight}
                     fill="transparent"
                     stroke={boardStroke}
-                    strokeWidth={palaceStrokeWidth}
+                    strokeWidth={palaceRectStrokeWidth}
                     shapeRendering="crispEdges"
                   />
                   <text
@@ -209,7 +210,7 @@ export default function DestinyBoard({ side = 600, palaces, ...props }: DestinyB
                     height={horizontalRectHeight}
                     fill="transparent"
                     stroke={boardStroke}
-                    strokeWidth={palaceStrokeWidth}
+                    strokeWidth={palaceRectStrokeWidth}
                     shapeRendering="crispEdges"
                   />
                   <text
@@ -234,7 +235,7 @@ export default function DestinyBoard({ side = 600, palaces, ...props }: DestinyB
                     height={verticalRectHeight}
                     fill="transparent"
                     stroke={boardStroke}
-                    strokeWidth={palaceStrokeWidth}
+                    strokeWidth={palaceRectStrokeWidth}
                     shapeRendering="crispEdges"
                   />
                   <text
@@ -276,7 +277,7 @@ export default function DestinyBoard({ side = 600, palaces, ...props }: DestinyB
                     points={_CP[index].points}
                     arrowSize={arrowSize}
                     stroke={selfTransformationStroke}
-                    strokeWidth={palaceStrokeWidth}
+                    strokeWidth={arrowWidth}
                   />
                   <text
                     x={_CP[index].text.x}

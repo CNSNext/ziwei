@@ -7,21 +7,22 @@ export default function App() {
       {/* <ZiWei side={800} name="xx" date="1998-1-23-1" gender="Yang" language="zh-Hant" /> */}
       <ZiWeiSimulator
         side={800}
-        ziweiBranchKey="Zi"
-        birthYearStemKey="Jia"
-        mainPalaceBranchKey="Yin"
+        birthYearStemKey="Gui"
+        ziweiBranchKey="Shen"
+        mainPalaceBranchKey="Shen"
         language="zh-Hant"
         options={{
           showPalaceName: false,
-          showSelf: false,
-          showStem: false,
-          showBranch: false,
-          showTransformation: false,
+          showSelf: true,
+          showStem: true,
+          showBranch: true,
+          showTransformation: true,
           showLaiYin: false,
         }}
         config={{
           palaceHoroscopeFill: "transparent",
           ziweiPalaceFill: colorPalette.w8,
+          palaceRectStrokeWidth: 0,
         }}
       />
     </div>

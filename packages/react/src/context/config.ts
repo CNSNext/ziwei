@@ -33,6 +33,8 @@ export interface ConfigContextProps {
   fontColor: string;
   /** 命盘的字体（思源宋体）行高比例  */
   fontLineHeight: number;
+  /** 宫位矩形的边框宽度  */
+  palaceRectStrokeWidth: number;
   /** 横向矩形的宽度  */
   horizontalRectWidth: number;
   /** 横向矩形的高度  */
@@ -93,6 +95,8 @@ export interface ConfigContextProps {
   centralPalaceFontSize: number;
   /** 中宫的版本字体大小 */
   centralPalaceVersionFontSize: number;
+  /** 箭头的宽度 */
+  arrowWidth: number;
 }
 
 export const ConfigContext = createContext<ConfigContextProps>({} as ConfigContextProps);

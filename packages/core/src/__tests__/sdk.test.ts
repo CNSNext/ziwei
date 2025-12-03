@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest";
+
+import type { CreateZiWeiLunisolarParams, CreateZiWeiSolarParams } from "../typings";
+
 import { getGlobalConfigs } from "../infra/configs";
 import {
   createZiWeiByLunisolar,
@@ -6,7 +9,6 @@ import {
   createZiWeiRuntime,
   withZiWeiRuntime,
 } from "../sdk";
-import type { CreateZiWeiLunisolarParams, CreateZiWeiSolarParams } from "../typings";
 
 const solarParams: CreateZiWeiSolarParams = {
   name: "测试命主",

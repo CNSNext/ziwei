@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import ZHHans from "../locales/zh-Hans";
 import ZHHant from "../locales/zh-Hant";
 

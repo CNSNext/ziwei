@@ -1,9 +1,11 @@
 import { LunarHour, SolarTime } from "tyme4ts";
-import { BRANCH_KEYS, STEM_KEYS } from "../constants";
+
 import type { GlobalConfigs } from "../infra/configs";
+import type { BranchKey, StemKey } from "../typings";
+
+import { BRANCH_KEYS, STEM_KEYS } from "../constants";
 import { i18n } from "../infra/i18n";
 import { getHourIndex } from "../rules/date";
-import type { BranchKey, StemKey } from "../typings";
 import { wrapIndex } from "./math";
 
 export function calculateZiWeiDate(date: string) {

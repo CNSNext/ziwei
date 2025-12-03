@@ -1,4 +1,5 @@
 import { use, useMemo } from "react";
+
 import { ConfigContext } from "../context/config";
 
 export function useCoordinates() {

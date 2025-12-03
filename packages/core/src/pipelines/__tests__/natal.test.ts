@@ -1,6 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { createZiWeiRuntime } from "../../context";
+
 import type { CreateZiWeiSolarParams } from "../../typings";
+
+import { createZiWeiRuntime } from "../../context";
 import * as dateUtils from "../../utils/date";
 import { calculateNatalBySolar } from "../natal";
 

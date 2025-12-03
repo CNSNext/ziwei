@@ -12,7 +12,6 @@
     "test:analytics": "vitest --reporter=junit --outputFile=test-report.junit.xml"
   },
   "devDependencies": {
-    "@biomejs/biome": "catalog:",
     "@changesets/changelog-github": "catalog:",
     "@changesets/cli": "catalog:",
     "@microsoft/api-extractor": "catalog:",
@@ -25,6 +24,9 @@
     "@vitest/ui": "catalog:",
     "is-ci": "catalog:",
     "lefthook": "catalog:",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "oxlint-tsgolint": "catalog:",
     "sort-package-json": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:",

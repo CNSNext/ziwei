@@ -1,3 +1,5 @@
+import type { BranchKey, StemKey } from "../typings";
+
 import {
   BRANCH_KEYS,
   FIVE_ELEMENT_SCHEME,
@@ -5,7 +7,6 @@ import {
   FIVE_ELEMENT_TABLE,
   STEM_KEYS,
 } from "../constants";
-import type { BranchKey, StemKey } from "../typings";
 
 /**
  *

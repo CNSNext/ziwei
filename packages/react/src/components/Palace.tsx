@@ -1,5 +1,6 @@
 import { useLongPress } from "ahooks";
 import { type MouseEventHandler, memo, type PropsWithChildren, use, useRef } from "react";
+
 import { ConfigContext } from "../context/config";
 
 export interface PalaceProps {

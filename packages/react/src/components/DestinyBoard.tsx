@@ -5,6 +5,7 @@ import {
   type TransformationKey,
 } from "@ziweijs/core";
 import { Activity, use, useRef, useState } from "react";
+
 import { ConfigContext } from "../context/config";
 import { RenderContext } from "../context/render";
 import { useCentripetal } from "../hooks/useCentripetal";

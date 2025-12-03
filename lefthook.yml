@@ -8,8 +8,14 @@ pre-commit:
 
     - name: lint
       glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
-      run: pnpm biome check --write --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {staged_files}
+      run: pnpm oxlint {staged_files}
+      stage_fixed: true
+
+    - name: format
+      glob: "*"
+      run: pnpm oxfmt --no-error-on-unmatched-pattern {staged_files}
       stage_fixed: true
 
     - name: type check
-      run: pnpm tsgo --noEmit
+      run: pnpm oxlint --type-aware {staged_files}
+      stage_fixed: true

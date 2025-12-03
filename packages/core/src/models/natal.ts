@@ -1,6 +1,7 @@
 import type { ZiWeiRuntime } from "../context";
-import { calculateDecade } from "../services/decade";
 import type { Natal, NatalProps } from "../typings";
+
+import { calculateDecade } from "../services/decade";
 
 export function createNatal(ctx: ZiWeiRuntime, props: NatalProps): Natal {
   return {

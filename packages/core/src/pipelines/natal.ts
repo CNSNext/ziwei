@@ -1,11 +1,13 @@
 import { LunarHour } from "tyme4ts";
+
 import type { ZiWeiRuntime } from "../context";
-import { _calculateNatalByStemBranch, calculateNatal } from "../services/natal";
 import type {
   CreateZiWeiLunisolarParams,
   CreateZiWeiSolarParams,
   NatalByStemBranchCalculateParams,
 } from "../typings";
+
+import { _calculateNatalByStemBranch, calculateNatal } from "../services/natal";
 import {
   calculateHourByIndex,
   calculateLunisolarDateBySolar,

@@ -1,4 +1,5 @@
 import { merge } from "remeda";
+
 import type { DeepPartial } from "../../typings";
 
 export interface GlobalConfigs {

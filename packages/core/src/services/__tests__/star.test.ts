@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+
 import { createZiWeiRuntime } from "../../context";
 import { getGlobalConfigs } from "../../infra/configs";
 import { calculatePalaceStemsAndBranches } from "../../rules/palace";

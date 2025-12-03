@@ -1,10 +1,11 @@
-import { BRANCH_KEYS, HOUR_RANGES, STEM_KEYS, YIN_YANG, YIN_YANG_KEYS } from "../constants";
 import type { ZiWeiRuntime } from "../context";
+import type { NatalByStemBranchCalculateParams, NatalCalculateParams } from "../typings";
+
+import { BRANCH_KEYS, HOUR_RANGES, STEM_KEYS, YIN_YANG, YIN_YANG_KEYS } from "../constants";
 import { createNatal } from "../models/natal";
 import { calculateFiveElementScheme } from "../rules/element";
 import { calculateMainPalaceIndex, calculatePalaceStemsAndBranches } from "../rules/palace";
 import { calculateStarIndex } from "../rules/star";
-import type { NatalByStemBranchCalculateParams, NatalCalculateParams } from "../typings";
 import { relativeIndex } from "../utils/math";
 import { calculateAllDecade, calculateDecadeIndexByDate } from "./decade";
 import { calculatePalaces, calculatePalacesByStemBranch } from "./palace";

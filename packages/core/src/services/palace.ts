@@ -1,9 +1,10 @@
-import { PALACE_KEYS } from "../constants";
 import type { ZiWeiRuntime } from "../context";
+import type { FiveElementSchemeValue, Palace, StemKey } from "../typings";
+
+import { PALACE_KEYS } from "../constants";
 import { createPalace } from "../models/palace";
 import { calculateDecadeRanges } from "../rules/decade";
 import { calculateCurrentPalaceIndex, isLaiYin, type StemBranch } from "../rules/palace";
-import type { FiveElementSchemeValue, Palace, StemKey } from "../typings";
 import { calculateStars, calculateStarsByStemBranch } from "./star";
 
 export interface PalacesCalculateParams {

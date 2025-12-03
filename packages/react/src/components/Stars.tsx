@@ -1,5 +1,6 @@
 import { MINOR_STARS, type Palace, type StarKey, type Star as StarModel } from "@ziweijs/core";
 import { memo, use, useCallback, useMemo } from "react";
+
 import { ConfigContext } from "../context/config";
 import Star from "./Star";
 

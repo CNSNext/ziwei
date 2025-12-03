@@ -1,5 +1,7 @@
 import { createI18n } from "@ziweijs/i18n";
+
 import type { Locale } from "../../typings";
+
 import ZH_HANS from "./locales/zh-Hans";
 import ZH_HANT from "./locales/zh-Hant";
 

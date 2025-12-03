@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { type MemoizeCache, memoize } from "../memoize";
 
 describe("utils helpers", () => {

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { BRANCH_KEYS } from "../../constants";
 import {
   calculateCurrentPalaceIndex,

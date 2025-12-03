@@ -1,11 +1,13 @@
 import { type BranchKey, createZiWeiByStemBranch, type Locale, type StemKey } from "@ziweijs/core";
 import { useState } from "react";
+
+import type { ZiWeiSimulatorOptions } from "./typings";
+
 import DestinyBoard from "./components/DestinyBoard";
 import { ConfigContext, type ConfigContextProps } from "./context/config";
 import { RenderContext, useRender } from "./context/render";
 import { useConfig } from "./hooks/useConfig";
 import { RuntimeContainer } from "./hooks/useRuntime";
-import type { ZiWeiSimulatorOptions } from "./typings";
 
 export interface ZiWeiSimulatorProps {
   side: number;

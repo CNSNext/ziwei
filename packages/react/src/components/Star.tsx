@@ -1,5 +1,7 @@
 import type { Palace, StarProps as ZiWeiStarProps } from "@ziweijs/core";
+
 import { memo, use } from "react";
+
 import { ConfigContext } from "../context/config";
 import { RenderContext } from "../context/render";
 import { RuntimeContainer } from "../hooks/useRuntime";

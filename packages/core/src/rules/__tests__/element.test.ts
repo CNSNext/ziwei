@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { FIVE_ELEMENT_SCHEME } from "../../constants";
 import { calculateFiveElementScheme } from "../element";
 

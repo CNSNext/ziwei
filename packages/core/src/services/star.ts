@@ -1,15 +1,17 @@
 import { map, pipe } from "remeda";
-import { BRANCH_KEYS } from "../constants";
+
 import type { ZiWeiRuntime } from "../context";
-import { createStar } from "../models/star";
 import type { StemBranch } from "../rules/palace";
+import type { Star, StemKey } from "../typings";
+
+import { BRANCH_KEYS } from "../constants";
+import { createStar } from "../models/star";
 import {
   createMajorStarsMeta,
   createMinorStarsMeta,
   getMinorStarIndices,
   memoCalculateStarTransformation,
 } from "../rules/star";
-import type { Star, StemKey } from "../typings";
 import { oppositeIndex, wrapIndex } from "../utils/math";
 
 export type StarsCalculateParams = Omit<

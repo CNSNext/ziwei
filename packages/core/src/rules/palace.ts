@@ -1,5 +1,6 @@
-import { BRANCH_KEYS, STEM_KEYS } from "../constants";
 import type { BranchKey, StemKey } from "../typings";
+
+import { BRANCH_KEYS, STEM_KEYS } from "../constants";
 import { wrapIndex } from "../utils/math";
 
 /**

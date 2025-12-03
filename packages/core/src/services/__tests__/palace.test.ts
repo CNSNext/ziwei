@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { createZiWeiRuntime } from "../../context";
 import { calculateDecadeRanges } from "../../rules/decade";
 import { calculateFiveElementScheme } from "../../rules/element";

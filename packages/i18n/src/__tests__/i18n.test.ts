@@ -1,4 +1,5 @@
 import { describe, expect, test, vi } from "vitest";
+
 import { createI18n, type I18nLanguages } from "../index";
 
 const resources = {

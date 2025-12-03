@@ -1,7 +1,8 @@
-import { PALACE_KEYS } from "../constants";
 import type { ZiWeiRuntime } from "../context";
-import { calculateCurrentPalaceIndex } from "../rules/palace";
 import type { BranchKey, DecadeVO, Palace, YearlyVO } from "../typings";
+
+import { PALACE_KEYS } from "../constants";
+import { calculateCurrentPalaceIndex } from "../rules/palace";
 import { calculateLunisolarDateBySolar, calculateNatalDateBySolar } from "../utils/date";
 import { wrapIndex } from "../utils/math";
 

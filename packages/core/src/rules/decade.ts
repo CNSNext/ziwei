@@ -1,4 +1,5 @@
 import type { FiveElementSchemeValue } from "../typings";
+
 import { wrapIndex } from "../utils/math";
 
 /**

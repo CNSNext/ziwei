@@ -1,3 +1,9 @@
+import type {
+  CreateZiWeiByStemBranchParams,
+  CreateZiWeiLunisolarParams,
+  CreateZiWeiSolarParams,
+} from "./typings";
+
 import {
   createZiWeiRuntime,
   type ResolveZiWeiRuntimeOptions,
@@ -11,11 +17,6 @@ import {
   calculateNatalBySolar,
   calculateNatalByStemBranch,
 } from "./pipelines/natal";
-import type {
-  CreateZiWeiByStemBranchParams,
-  CreateZiWeiLunisolarParams,
-  CreateZiWeiSolarParams,
-} from "./typings";
 
 type CreateZiWeiOptions = ResolveZiWeiRuntimeOptions;
 

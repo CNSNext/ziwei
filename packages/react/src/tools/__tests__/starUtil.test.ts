@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { computeExitArrowLayout, type Orientation, orientationFromPalaceIndex } from "../starUtil";
 
 describe("orientationFromPalaceIndex", () => {

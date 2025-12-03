@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
+
+import { createZiWeiRuntime, resolveZiWeiRuntime } from "..";
 import { getGlobalConfigs } from "../../infra/configs";
 import { createZiWeiI18n } from "../../infra/i18n";
-import { createZiWeiRuntime, resolveZiWeiRuntime } from "..";
 
 describe("context/createZiWeiRuntime", () => {
   it("在未注入选项时提供默认依赖", () => {

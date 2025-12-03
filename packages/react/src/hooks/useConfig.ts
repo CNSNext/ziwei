@@ -1,5 +1,7 @@
 import { useCallback, useMemo } from "react";
+
 import type { ConfigContextProps } from "../context/config";
+
 import { colorPalette } from "../theme/color";
 
 export interface UseConfigProps extends Partial<ConfigContextProps> {

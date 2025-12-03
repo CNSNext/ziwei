@@ -20,20 +20,20 @@ export function useCoordinates() {
         y: boardY + boardPadding + palaceSide * 1,
       },
       {
-        x: boardX + boardPadding + palaceSide * 0,
-        y: boardY + boardPadding + palaceSide * 0,
+        x: boardX + boardPadding,
+        y: boardY + boardPadding,
       },
       {
         x: boardX + boardPadding + palaceSide * 1,
-        y: boardY + boardPadding + palaceSide * 0,
+        y: boardY + boardPadding,
       },
       {
         x: boardX + boardPadding + palaceSide * 2,
-        y: boardY + boardPadding + palaceSide * 0,
+        y: boardY + boardPadding,
       },
       {
         x: boardX + boardPadding + palaceSide * 3,
-        y: boardY + boardPadding + palaceSide * 0,
+        y: boardY + boardPadding,
       },
       {
         x: boardX + boardPadding + palaceSide * 3,

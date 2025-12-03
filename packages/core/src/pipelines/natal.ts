@@ -31,7 +31,7 @@ export const calculateNatalBySolar =
       timezone = 8,
       referenceDate,
     } = params;
-    language && runtime.i18n.setCurrentLanguage(language);
+    if (language) runtime.i18n.setCurrentLanguage(language);
 
     const globalConfigs = runtime.configs;
     const normalizedDate = normalizeDateByTimezone(date, timezone);
@@ -72,7 +72,7 @@ export const calculateNatalBySolar =
 export const calculateNatalByLunisolar =
   ({ name, gender, date, language, referenceDate }: CreateZiWeiLunisolarParams) =>
   (runtime: ZiWeiRuntime) => {
-    language && runtime.i18n.setCurrentLanguage(language);
+    if (language) runtime.i18n.setCurrentLanguage(language);
     const [year, month, days, currentHourIndex] = date.split("-").map(Number);
     const [hour, minute, second] = calculateHourByIndex(currentHourIndex);
     const lunarHour = LunarHour.fromYmdHms(year, month, days, hour, minute, second);
@@ -107,7 +107,7 @@ export const calculateNatalByStemBranch =
     language,
   }: NatalByStemBranchCalculateParams) =>
   (runtime: ZiWeiRuntime) => {
-    language && runtime.i18n.setCurrentLanguage(language);
+    if (language) runtime.i18n.setCurrentLanguage(language);
     // 根据指定的地支位置来计算星辰排列
     return _calculateNatalByStemBranch(runtime, {
       birthYearStemKey,

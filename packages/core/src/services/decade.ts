@@ -3,7 +3,7 @@ import type { BranchKey, DecadeVO, Palace, YearlyVO } from "../typings";
 
 import { PALACE_KEYS } from "../constants";
 import { calculateCurrentPalaceIndex } from "../rules/palace";
-import { calculateLunisolarDateBySolar, calculateNatalDateBySolar } from "../utils/date";
+import { calculateLunisolarDateBySolar, calculateNatalDateBySolar } from "../utils/calendar";
 import { wrapIndex } from "../utils/math";
 
 export interface DecadeByDateCalculateParams {

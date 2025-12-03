@@ -6,7 +6,7 @@ import type { BranchKey, Palace, PalaceKey, StarKey } from "../../typings";
 import { BRANCH, BRANCH_KEYS, PALACE_HANS, PALACE_KEYS, STAR_HANS, STEM } from "../../constants";
 import { createZiWeiRuntime } from "../../context";
 import { createPalace } from "../../models/palace";
-import * as dateUtils from "../../utils/date";
+import * as calendarUtils from "../../utils/calendar";
 import * as decadeService from "../decade";
 
 const { calculateDecade, calculateDecadeByDate, calculateYearly } = decadeService;
@@ -74,8 +74,8 @@ describe("services/decade", () => {
     }));
 
     const lunarHour = LunarHour.fromYmdHms(2300, 1, 1, 0, 0, 0);
-    vi.spyOn(dateUtils, "calculateLunisolarDateBySolar").mockReturnValue(lunarHour);
-    vi.spyOn(dateUtils, "calculateNatalDateBySolar").mockReturnValue({
+    vi.spyOn(calendarUtils, "calculateLunisolarDateBySolar").mockReturnValue(lunarHour);
+    vi.spyOn(calendarUtils, "calculateNatalDateBySolar").mockReturnValue({
       stemKey: "Jia",
       branchKey: "Zi",
       year: 2300,

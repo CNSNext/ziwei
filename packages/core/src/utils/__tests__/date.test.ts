@@ -7,14 +7,13 @@ import {
   calculateHourByIndex,
   calculateLunisolarDateBySolar,
   calculateNatalDateBySolar,
-  calculateTrueSolarTime,
   calculateZiWeiDate,
   fixLeapMonth,
-  getLunisolarDateText,
-  getSolarDateText,
   getStemAndBranchByYear,
   normalizeHour,
-} from "../date";
+} from "../calendar";
+import { getLunisolarDateText, getSolarDateText } from "../format";
+import { calculateTrueSolarTime } from "../trueSolarTime";
 
 const defaultConfigs = getGlobalConfigs();
 

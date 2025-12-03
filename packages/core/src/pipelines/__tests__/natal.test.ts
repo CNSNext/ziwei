@@ -3,7 +3,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import type { CreateZiWeiSolarParams } from "../../typings";
 
 import { createZiWeiRuntime } from "../../context";
-import * as dateUtils from "../../utils/date";
+import * as formatUtils from "../../utils/format";
+import * as trueSolarUtils from "../../utils/trueSolarTime";
 import { calculateNatalBySolar } from "../natal";
 
 const baseSolarDate = new Date("1993-08-08T08:00:00+08:00");
@@ -92,10 +93,10 @@ describe("pipelines/natal", () => {
     delete (params as { longitude?: number }).longitude;
 
     const trueSolarTime = new Date("1993-08-08T07:45:00+08:00");
-    const spy = vi.spyOn(dateUtils, "calculateTrueSolarTime").mockReturnValue(trueSolarTime);
+    const spy = vi.spyOn(trueSolarUtils, "calculateTrueSolarTime").mockReturnValue(trueSolarTime);
 
     const natal = calculateNatalBySolar(params)(runtime);
-    const expectedText = dateUtils.getSolarDateText(trueSolarTime);
+    const expectedText = formatUtils.getSolarDateText(trueSolarTime);
 
     expect(spy).toHaveBeenCalledWith(baseSolarDate, 116.38333, 8);
     expect(natal.solarDateByTrue).toBe(expectedText);
@@ -109,10 +110,10 @@ describe("pipelines/natal", () => {
     (params as { longitude?: number }).longitude = undefined;
 
     const trueSolarTime = new Date("1993-08-08T07:40:00+08:00");
-    const spy = vi.spyOn(dateUtils, "calculateTrueSolarTime").mockReturnValue(trueSolarTime);
+    const spy = vi.spyOn(trueSolarUtils, "calculateTrueSolarTime").mockReturnValue(trueSolarTime);
 
     const natal = calculateNatalBySolar(params)(runtime);
-    const expectedText = dateUtils.getSolarDateText(trueSolarTime);
+    const expectedText = formatUtils.getSolarDateText(trueSolarTime);
 
     expect(spy).toHaveBeenCalledWith(baseSolarDate, 116.38333, 8);
     expect(natal.solarDateByTrue).toBe(expectedText);

@@ -12,12 +12,11 @@ import {
   calculateHourByIndex,
   calculateLunisolarDateBySolar,
   calculateNatalDateBySolar,
-  calculateTrueSolarTime,
   calculateZiWeiDate,
-  getLunisolarDateText,
-  getSolarDateText,
-} from "../utils/date";
+} from "../utils/calendar";
+import { getLunisolarDateText, getSolarDateText } from "../utils/format";
 import { normalizeDateByTimezone } from "../utils/timezone";
+import { calculateTrueSolarTime } from "../utils/trueSolarTime";
 
 export const calculateNatalBySolar =
   (params: CreateZiWeiSolarParams) => (runtime: ZiWeiRuntime) => {

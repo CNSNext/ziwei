@@ -18,7 +18,9 @@ packages/core/
 │  ├─ models/          # createNatal/Palace/Star 等领域对象工厂
 │  ├─ typings/         # 公共类型定义、VO 接口
 │  ├─ utils/
-│  │  ├─ date.ts       # 日历换算、真太阳时、干支推导
+│  │  ├─ calendar.ts   # 日历换算（阳历/阴历）、闰月/子时策略、干支推导
+│  │  ├─ trueSolarTime.ts # 真太阳时（NOAA 公式）
+│  │  ├─ format.ts     # 日期/时辰文本格式化
 │  │  ├─ math.ts       # wrapIndex 等数学辅助
 │  │  ├─ memoize.ts    # 轻量缓存辅助
 │  │  └─ sexagenary.ts # 干支算法
@@ -40,7 +42,8 @@ packages/core/
 - **Pipelines**：面向业务输入（公历或农历字符串），封装时间换算与参数校准。`calculateNatalBySolar` 会按需执行真太阳时修正、转换为 `tyme4ts` 的 `LunarHour` 后再进入 `calculateNatal`。
 - **Models**：封装领域实体的附加能力，如 `createNatal` 内部挂载 `getDecade()`、`getDecadeIndex()`，`createPalace` 提供 `flying()` 计算宫位化曜。
 - **Typings**：集中导出 `CreateZiWeiSolarParams`、`NatalCalculateParams`、`Palace`、`Star` 等类型，确保跨层 API 一致性。
-- **Utils**：`utils/date.ts` 处理所有与时间相关的副作用，`utils/memoize` 封装通用缓存工具，`utils/math`、`utils/sexagenary` 提供非业务数学/干支操作。
+- **Utils**：`utils/calendar.ts`/`utils/trueSolarTime.ts`/`utils/format.ts` 处理与时间相关的逻辑与文本，`utils/memoize` 封装通用缓存工具，`utils/math`、`utils/sexagenary` 提供非业务数学/干支操作。
+  - 自 vX.Y.Z 起已拆分为 `calendar.ts` / `trueSolarTime.ts` / `format.ts`，`date.ts` 仅保留聚合导出用于兼容，建议新代码直接从拆分模块引入。
 - **SDK & Public API**：`sdk.ts` 暴露 `createZiWeiBySolar` / `createZiWeiByLunisolar` 并 re-export runtime 类型；`public.ts` 是包的最终出口，集中导出常量、工具、类型及 SDK。
 
 ## 运行链路
@@ -49,7 +52,7 @@ packages/core/
 
 1. **SDK 调用**：使用方调用 `createZiWeiBySolar(params, options)`，SDK 会基于 `defaultRuntime` 执行 `calculateNatalBySolar`。
 2. **多语言设置**：pipeline 根据 `params.language` 调用 `runtime.i18n.setCurrentLanguage`，保证整个请求生命周期的翻译一致。
-3. **真太阳时修正**：当传入 `longitude` 且 `useTrueSolarTime` 为 `true` 时，`calculateTrueSolarTime` 会在 `utils/date.ts` 内依据 NOAA 公式对时间做校正，结果写入 `solarDateByTrue`。
+3. **真太阳时修正**：当传入 `longitude` 且 `useTrueSolarTime` 为 `true` 时，`calculateTrueSolarTime` 会在 `utils/trueSolarTime.ts` 内依据 NOAA 公式对时间做校正，结果写入 `solarDateByTrue`。
 4. **阳历→阴历**：`calculateLunisolarDateBySolar` 使用 `tyme4ts` 将 JS `Date` 转换为 `LunarHour`，再由 `calculateNatalDateBySolar` 结合 `GlobalConfigs` 处理晚子时、闰月策略，得到干支、月索引、日与时辰。
 5. **计算命盘**：pipeline 将转换后的结构组装为 `NatalCalculateParams`，交给 `services/natal.calculateNatal`。
 6. **构建宫位与星曜**：`calculateNatal` 调用 `rules/palace` 与 `rules/star` 获得十二宫顺序、五行局、主/辅星分布，交由 `services/palace.calculatePalaces` 使用 `createPalace` 构建可读对象。

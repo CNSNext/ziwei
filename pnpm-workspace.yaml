@@ -10,7 +10,7 @@ catalog:
   "@moonrepo/cli": 1.41.7
   "@rsbuild/core": 1.6.12
   "@rsbuild/plugin-react": 1.4.2
-  "@rslib/core": 0.18.2
+  "@rslib/core": 0.18.3
   "@types/react": 19.2.7
   "@types/react-dom": 19.2.3
   "@typescript/native-preview": 7.0.0-dev.20251130.1

@@ -6,7 +6,7 @@ packages:
 catalog:
   "@changesets/changelog-github": 0.5.2
   "@changesets/cli": 2.29.8
-  "@microsoft/api-extractor": 7.55.1
+  "@microsoft/api-extractor": 7.55.2
   "@moonrepo/cli": 1.41.7
   "@rsbuild/core": 1.6.11
   "@rsbuild/plugin-react": 1.4.2

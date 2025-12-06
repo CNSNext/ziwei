@@ -19,8 +19,8 @@ catalogs:
       specifier: 1.41.7
       version: 1.41.7
     '@rsbuild/core':
-      specifier: 1.6.12
-      version: 1.6.12
+      specifier: 1.6.13
+      version: 1.6.13
     '@rsbuild/plugin-react':
       specifier: 1.4.2
       version: 1.4.2
@@ -204,10 +204,10 @@ importers:
         version: 7.55.2(@types/node@24.6.1)
       '@rsbuild/core':
         specifier: 'catalog:'
-        version: 1.6.12
+        version: 1.6.13
       '@rsbuild/plugin-react':
         specifier: 'catalog:'
-        version: 1.4.2(@rsbuild/core@1.6.12)
+        version: 1.4.2(@rsbuild/core@1.6.13)
       '@rslib/core':
         specifier: 'catalog:'
         version: 0.18.3(@microsoft/api-extractor@7.55.2(@types/node@24.6.1))(@typescript/native-preview@7.0.0-dev.20251206.1)(typescript@5.9.3)
@@ -972,6 +972,11 @@ packages:
 
   '@rsbuild/core@1.6.12':
     resolution: {integrity: sha512-gHwDfAMMgK2Zu9JgiekX949F262g6yYY+/ZLTIaMXHZmqYLAgsu0XOeVogpfQa045xcnwcQfpieiB9zgukJSgw==}
+    engines: {node: '>=18.12.0'}
+    hasBin: true
+
+  '@rsbuild/core@1.6.13':
+    resolution: {integrity: sha512-7Isd9G6ufIK5+kPCH8OhvVAVD5clsak9bp9IfhyEWT8SH43cLuXsUpK+4w0a6JA/kM98ea7KJEigIuCHJ5wAag==}
     engines: {node: '>=18.12.0'}
     hasBin: true
 
@@ -2950,9 +2955,17 @@ snapshots:
       core-js: 3.47.0
       jiti: 2.6.1
 
-  '@rsbuild/plugin-react@1.4.2(@rsbuild/core@1.6.12)':
+  '@rsbuild/core@1.6.13':
     dependencies:
-      '@rsbuild/core': 1.6.12
+      '@rspack/core': 1.6.6(@swc/helpers@0.5.17)
+      '@rspack/lite-tapable': 1.1.0
+      '@swc/helpers': 0.5.17
+      core-js: 3.47.0
+      jiti: 2.6.1
+
+  '@rsbuild/plugin-react@1.4.2(@rsbuild/core@1.6.13)':
+    dependencies:
+      '@rsbuild/core': 1.6.13
       '@rspack/plugin-react-refresh': 1.5.2(react-refresh@0.18.0)
       react-refresh: 0.18.0
     transitivePeerDependencies:
